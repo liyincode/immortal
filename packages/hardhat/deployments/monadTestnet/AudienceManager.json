@@ -1,0 +1,800 @@
+{
+  "address": "0x1bbE773134E6aC83541C3baCF384f55E5d50F0Ae",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_initialOwner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "player1",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "player2",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "ActiveFightersSet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "fighterCheeredFor",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "audienceMember",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newTotalHeatForThisPairing",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cheerAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "FighterCheered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "seatId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "SeatLeft",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "seatId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "SeatTaken",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "TOTAL_SEATS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "activeFightersInMatch",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_fighterToCheerFor",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_cheerPoints",
+          "type": "uint256"
+        }
+      ],
+      "name": "cheerForFighter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "fighterAudienceHeat",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getActiveFighters",
+      "outputs": [
+        {
+          "internalType": "address[2]",
+          "name": "",
+          "type": "address[2]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_fighter",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_audienceMember",
+          "type": "address"
+        }
+      ],
+      "name": "getAudienceHeatForFighter",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOccupiedSeatInfo",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "seatIds_",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "occupants_",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_seatIdFromFrontend",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSeatOccupant",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserSeatId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        }
+      ],
+      "name": "leaveSeat",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "seatOccupants",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_player1",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_player2",
+          "type": "address"
+        }
+      ],
+      "name": "setActiveFighters",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_seatIdFromFrontend",
+          "type": "uint256"
+        }
+      ],
+      "name": "takeSeat",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "userCurrentSeat",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x1fd7fd7b57faf4fb2e761f919cc81ce9a11f3c327e7734607778d60def732f17",
+  "receipt": {
+    "to": null,
+    "from": "0x8d6184D01C461d53044094c6e8850bf60604dDA2",
+    "contractAddress": "0x1bbE773134E6aC83541C3baCF384f55E5d50F0Ae",
+    "transactionIndex": 11,
+    "gasUsed": "1162936",
+    "logsBloom": "0x00000000000000000000000000000040000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000002000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000020000000000000000000000000",
+    "blockHash": "0x6092bdea38cdb54c85e612df09ab80f625019715e7d5b75fc1ebe4d73ba527dd",
+    "transactionHash": "0x1fd7fd7b57faf4fb2e761f919cc81ce9a11f3c327e7734607778d60def732f17",
+    "logs": [
+      {
+        "transactionIndex": 11,
+        "blockNumber": 20629930,
+        "transactionHash": "0x1fd7fd7b57faf4fb2e761f919cc81ce9a11f3c327e7734607778d60def732f17",
+        "address": "0x1bbE773134E6aC83541C3baCF384f55E5d50F0Ae",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000008d6184d01c461d53044094c6e8850bf60604dda2"
+        ],
+        "data": "0x",
+        "logIndex": 29,
+        "blockHash": "0x6092bdea38cdb54c85e612df09ab80f625019715e7d5b75fc1ebe4d73ba527dd"
+      }
+    ],
+    "blockNumber": 20629930,
+    "cumulativeGasUsed": "16577390",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x8d6184D01C461d53044094c6e8850bf60604dDA2"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "9c31133fffffde4826cff076505bdc89",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_initialOwner\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"player1\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"player2\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ActiveFightersSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"fighterCheeredFor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"audienceMember\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newTotalHeatForThisPairing\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cheerAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"FighterCheered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"seatId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"SeatLeft\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"seatId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"SeatTaken\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"TOTAL_SEATS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"activeFightersInMatch\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_fighterToCheerFor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_cheerPoints\",\"type\":\"uint256\"}],\"name\":\"cheerForFighter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"fighterAudienceHeat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"}],\"name\":\"getActiveFighters\",\"outputs\":[{\"internalType\":\"address[2]\",\"name\":\"\",\"type\":\"address[2]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_fighter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_audienceMember\",\"type\":\"address\"}],\"name\":\"getAudienceHeatForFighter\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"}],\"name\":\"getOccupiedSeatInfo\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"seatIds_\",\"type\":\"uint256[]\"},{\"internalType\":\"address[]\",\"name\":\"occupants_\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_seatIdFromFrontend\",\"type\":\"uint256\"}],\"name\":\"getSeatOccupant\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"getUserSeatId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"}],\"name\":\"leaveSeat\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"seatOccupants\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_player1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_player2\",\"type\":\"address\"}],\"name\":\"setActiveFighters\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_seatIdFromFrontend\",\"type\":\"uint256\"}],\"name\":\"takeSeat\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"userCurrentSeat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"\\u7ba1\\u7406\\u7279\\u5b9a\\u6bd4\\u8d5b\\u7684\\u89c2\\u4f17\\u5e2d\\u4f4d\\u3001\\u5165\\u5ea7\\u4ee5\\u53ca\\u89c2\\u4f17\\u4e3a\\u7279\\u5b9a\\u9009\\u624b\\u7684\\u52a0\\u6cb9\\u70ed\\u529b\\u503c\\u3002 \\u5ea7\\u4f4dID\\u4ece1\\u5f00\\u59cb\\uff0c0\\u4ee3\\u8868\\u672a\\u5360\\u5ea7\\u3002\",\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"cheerForFighter(uint256,address,uint256)\":{\"details\":\"\\u89c2\\u4f17\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u6307\\u5b9a\\u9009\\u624b\\u52a0\\u6cb9\\uff0c\\u589e\\u52a0\\u8be5\\u9009\\u624b\\u83b7\\u5f97\\u7684\\u70ed\\u529b\\u503c\\u3002\",\"params\":{\"_cheerPoints\":\"\\u672c\\u6b21\\u52a0\\u6cb9\\u589e\\u52a0\\u7684\\u70ed\\u529b\\u70b9\\u6570\\u3002\",\"_fighterToCheerFor\":\"\\u8981\\u4e3a\\u5176\\u52a0\\u6cb9\\u7684\\u9009\\u624b\\u5730\\u5740\\u3002\",\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\"}},\"getActiveFighters(uint256)\":{\"details\":\"\\u83b7\\u53d6\\u6307\\u5b9a\\u6bd4\\u8d5bID\\u7684\\u4e24\\u4f4d\\u6d3b\\u8dc3\\u9009\\u624b\\u5730\\u5740\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\"},\"returns\":{\"_0\":\"address[2] memory \\u5305\\u542b\\u4e24\\u4f4d\\u9009\\u624b\\u5730\\u5740\\u7684\\u6570\\u7ec4; \\u5982\\u679c\\u672a\\u8bbe\\u7f6e\\u5219\\u5730\\u5740\\u4e3a address(0)\\u3002\"}},\"getAudienceHeatForFighter(uint256,address,address)\":{\"details\":\"\\u83b7\\u53d6\\u6307\\u5b9a\\u89c2\\u4f17\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u6307\\u5b9a\\u9009\\u624b\\u8d21\\u732e\\u7684\\u603b\\u70ed\\u529b\\u503c\\u3002\",\"params\":{\"_audienceMember\":\"\\u89c2\\u4f17\\u5730\\u5740\\u3002\",\"_fighter\":\"\\u9009\\u624b\\u5730\\u5740\\u3002\",\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\"},\"returns\":{\"_0\":\"uint256 \\u70ed\\u529b\\u503c\\u3002\"}},\"getOccupiedSeatInfo(uint256)\":{\"details\":\"\\u83b7\\u53d6\\u6307\\u5b9a\\u6bd4\\u8d5bID\\u7684\\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u4fe1\\u606f\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\"},\"returns\":{\"occupants_\":\"\\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u7684\\u5360\\u7528\\u8005\\u5730\\u5740\\u6570\\u7ec4\\u3002\",\"seatIds_\":\"\\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u7684ID\\u6570\\u7ec4 (1-indexed)\\u3002\"}},\"getSeatOccupant(uint256,uint256)\":{\"details\":\"\\u83b7\\u53d6\\u6307\\u5b9a\\u5ea7\\u4f4d\\u4e0a\\u7684\\u5360\\u7528\\u8005\\u5730\\u5740\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\",\"_seatIdFromFrontend\":\"\\u8981\\u68c0\\u67e5\\u7684\\u5ea7\\u4f4dID (1 \\u5230 TOTAL_SEATS)\\u3002\"},\"returns\":{\"_0\":\"\\u5360\\u7528\\u8005\\u5730\\u5740\\u3002\"}},\"getUserSeatId(uint256,address)\":{\"details\":\"\\u83b7\\u53d6\\u6307\\u5b9a\\u7528\\u6237\\u5728\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u5ea7\\u4f4dID\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\",\"_user\":\"\\u7528\\u6237\\u5730\\u5740\\u3002\"},\"returns\":{\"_0\":\"\\u7528\\u6237\\u5360\\u7528\\u7684\\u5ea7\\u4f4dID (1-indexed, \\u6216 NO_SEAT(0))\\u3002\"}},\"leaveSeat(uint256)\":{\"details\":\"\\u7528\\u6237\\u79bb\\u5f00\\u5f53\\u524d\\u5728\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u5360\\u636e\\u7684\\u5ea7\\u4f4d\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"setActiveFighters(uint256,address,address)\":{\"details\":\"\\u8bbe\\u7f6e\\u67d0\\u573a\\u6bd4\\u8d5b\\u7684\\u6d3b\\u8dc3\\u5bf9\\u6218\\u9009\\u624b\\u3002\\u5e94\\u5728\\u6bd4\\u8d5b\\u6b63\\u5f0f\\u5f00\\u59cb\\u524d\\u7531\\u7ba1\\u7406\\u5458\\u6216\\u4e3b\\u6bd4\\u8d5b\\u5408\\u7ea6\\u8c03\\u7528\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\",\"_player1\":\"\\u9009\\u624b1\\u7684\\u5730\\u5740\\u3002\",\"_player2\":\"\\u9009\\u624b2\\u7684\\u5730\\u5740\\u3002\"}},\"takeSeat(uint256,uint256)\":{\"details\":\"\\u7528\\u6237\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u9009\\u62e9\\u5e76\\u5360\\u636e\\u4e00\\u4e2a\\u5ea7\\u4f4d\\u3002\",\"params\":{\"_matchId\":\"\\u8981\\u52a0\\u5165\\u7684\\u6bd4\\u8d5bID\\u3002\",\"_seatIdFromFrontend\":\"\\u8981\\u9009\\u62e9\\u7684\\u5ea7\\u4f4dID (1 \\u5230 TOTAL_SEATS)\\u3002\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"\\u89c2\\u4f17\\u7ba1\\u7406\\u5408\\u7ea6\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/AudienceManager.sol\":\"AudienceManager\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/AudienceManager.sol\":{\"content\":\"//SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\n/**\\n * @title \\u89c2\\u4f17\\u7ba1\\u7406\\u5408\\u7ea6\\n * @dev \\u7ba1\\u7406\\u7279\\u5b9a\\u6bd4\\u8d5b\\u7684\\u89c2\\u4f17\\u5e2d\\u4f4d\\u3001\\u5165\\u5ea7\\u4ee5\\u53ca\\u89c2\\u4f17\\u4e3a\\u7279\\u5b9a\\u9009\\u624b\\u7684\\u52a0\\u6cb9\\u70ed\\u529b\\u503c\\u3002\\n * \\u5ea7\\u4f4dID\\u4ece1\\u5f00\\u59cb\\uff0c0\\u4ee3\\u8868\\u672a\\u5360\\u5ea7\\u3002\\n */\\ncontract AudienceManager is Ownable {\\n\\n    // --- \\u5e38\\u91cf ---\\n    uint256 public constant TOTAL_SEATS = 50; // \\u6bcf\\u573a\\u6bd4\\u8d5b\\u7684\\u5ea7\\u4f4d\\u603b\\u6570\\n    uint256 internal constant NO_SEAT = 0;    // 0 \\u4ee3\\u8868\\u7528\\u6237\\u672a\\u9009\\u62e9\\u4efb\\u4f55\\u5ea7\\u4f4d (\\u5ea7\\u4f4dID\\u4ece1\\u5f00\\u59cb)\\n\\n    // --- \\u6570\\u636e\\u7ed3\\u6784 ---\\n\\n    // \\u6620\\u5c041: seatOccupants[\\u6bd4\\u8d5bID][\\u5185\\u90e8\\u5ea7\\u4f4d\\u7d22\\u5f15 (0 to TOTAL_SEATS-1)] => \\u5360\\u7528\\u8005\\u5730\\u5740\\n    mapping(uint256 => mapping(uint256 => address)) public seatOccupants;\\n\\n    // \\u6620\\u5c042: userCurrentSeat[\\u6bd4\\u8d5bID][\\u7528\\u6237\\u5730\\u5740] => \\u7528\\u6237\\u5360\\u7528\\u7684\\u5ea7\\u4f4dID (1-indexed, \\u6216 NO_SEAT(0))\\n    mapping(uint256 => mapping(address => uint256)) public userCurrentSeat;\\n\\n    // \\u6620\\u5c043: fighterAudienceHeat[\\u6bd4\\u8d5bID][\\u9009\\u624b\\u5730\\u5740][\\u89c2\\u4f17\\u5730\\u5740] => \\u89c2\\u4f17\\u4e3a\\u8be5\\u9009\\u624b\\u8d21\\u732e\\u7684\\u70ed\\u529b\\u503c\\n    mapping(uint256 => mapping(address => mapping(address => uint256))) public fighterAudienceHeat;\\n\\n    // \\u6620\\u5c044: activeFightersInMatch[\\u6bd4\\u8d5bID] => [\\u9009\\u624bA\\u5730\\u5740, \\u9009\\u624bB\\u5730\\u5740]\\n    // \\u7528\\u4e8e\\u9a8c\\u8bc1\\u52a0\\u6cb9\\u76ee\\u6807\\u662f\\u5426\\u4e3a\\u5f53\\u524d\\u6bd4\\u8d5b\\u7684\\u5408\\u6cd5\\u9009\\u624b\\u3002\\u7531Owner\\u6216MatchContract\\u8bbe\\u7f6e\\u3002\\n    mapping(uint256 => address[2]) public activeFightersInMatch;\\n\\n    // --- \\u4e8b\\u4ef6 ---\\n    event SeatTaken(uint256 indexed matchId, uint256 indexed seatId, address indexed user, uint256 timestamp);\\n    event SeatLeft(uint256 indexed matchId, uint256 indexed seatId, address indexed user, uint256 timestamp);\\n    event ActiveFightersSet(uint256 indexed matchId, address player1, address player2, uint256 timestamp);\\n    event FighterCheered(\\n        uint256 indexed matchId,\\n        address indexed fighterCheeredFor,\\n        address indexed audienceMember,\\n        uint256 newTotalHeatForThisPairing, // \\u8be5\\u89c2\\u4f17\\u4e3a\\u8be5\\u9009\\u624b\\u8d21\\u732e\\u7684\\u603b\\u70ed\\u529b\\n        uint256 cheerAmount,                // \\u672c\\u6b21\\u52a0\\u6cb9\\u70b9\\u6570\\n        uint256 timestamp\\n    );\\n\\n    // --- \\u6784\\u9020\\u51fd\\u6570 ---\\n    constructor(address _initialOwner) Ownable(_initialOwner) {}\\n\\n    // --- Owner\\u4e13\\u5c5e\\u51fd\\u6570 ---\\n    /**\\n     * @dev \\u8bbe\\u7f6e\\u67d0\\u573a\\u6bd4\\u8d5b\\u7684\\u6d3b\\u8dc3\\u5bf9\\u6218\\u9009\\u624b\\u3002\\u5e94\\u5728\\u6bd4\\u8d5b\\u6b63\\u5f0f\\u5f00\\u59cb\\u524d\\u7531\\u7ba1\\u7406\\u5458\\u6216\\u4e3b\\u6bd4\\u8d5b\\u5408\\u7ea6\\u8c03\\u7528\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _player1 \\u9009\\u624b1\\u7684\\u5730\\u5740\\u3002\\n     * @param _player2 \\u9009\\u624b2\\u7684\\u5730\\u5740\\u3002\\n     */\\n    function setActiveFighters(uint256 _matchId, address _player1, address _player2) external onlyOwner {\\n        require(_matchId > 0, \\\"AudienceManager: Invalid matchId\\\");\\n        require(_player1 != address(0) && _player2 != address(0), \\\"AudienceManager: Player address cannot be empty\\\");\\n        require(_player1 != _player2, \\\"AudienceManager: Two player addresses cannot be the same\\\");\\n\\n        activeFightersInMatch[_matchId] = [_player1, _player2];\\n        emit ActiveFightersSet(_matchId, _player1, _player2, block.timestamp);\\n    }\\n\\n\\n    // --- \\u4fee\\u6539\\u72b6\\u6001\\u7684\\u51fd\\u6570 ---\\n\\n    /**\\n     * @dev \\u7528\\u6237\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u9009\\u62e9\\u5e76\\u5360\\u636e\\u4e00\\u4e2a\\u5ea7\\u4f4d\\u3002\\n     * @param _matchId \\u8981\\u52a0\\u5165\\u7684\\u6bd4\\u8d5bID\\u3002\\n     * @param _seatIdFromFrontend \\u8981\\u9009\\u62e9\\u7684\\u5ea7\\u4f4dID (1 \\u5230 TOTAL_SEATS)\\u3002\\n     */\\n    function takeSeat(uint256 _matchId, uint256 _seatIdFromFrontend) external {\\n        address _user = msg.sender;\\n        require(_matchId > 0, \\\"AudienceManager: Invalid matchId\\\");\\n        require(_seatIdFromFrontend > 0 && _seatIdFromFrontend <= TOTAL_SEATS, \\\"AudienceManager: Invalid seatId\\\");\\n        require(userCurrentSeat[_matchId][_user] == NO_SEAT, \\\"AudienceManager: You have already taken a seat\\\");\\n\\n        uint256 internalSeatIndex = _seatIdFromFrontend - 1;\\n        require(seatOccupants[_matchId][internalSeatIndex] == address(0), \\\"AudienceManager: This seat is already occupied\\\");\\n\\n        seatOccupants[_matchId][internalSeatIndex] = _user;\\n        userCurrentSeat[_matchId][_user] = _seatIdFromFrontend;\\n\\n        emit SeatTaken(_matchId, _seatIdFromFrontend, _user, block.timestamp);\\n    }\\n\\n    /**\\n     * @dev \\u7528\\u6237\\u79bb\\u5f00\\u5f53\\u524d\\u5728\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u5360\\u636e\\u7684\\u5ea7\\u4f4d\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     */\\n    function leaveSeat(uint256 _matchId) external {\\n        address _user = msg.sender;\\n        require(_matchId > 0, \\\"AudienceManager: Invalid matchId\\\");\\n        uint256 currentSeatIdFromFrontend = userCurrentSeat[_matchId][_user];\\n        require(currentSeatIdFromFrontend != NO_SEAT, \\\"AudienceManager: You are not in a seat\\\");\\n        \\n        uint256 internalSeatIndex = currentSeatIdFromFrontend - 1;\\n        require(seatOccupants[_matchId][internalSeatIndex] == _user, \\\"AudienceManager: You are not the occupant of this seat\\\");\\n\\n        seatOccupants[_matchId][internalSeatIndex] = address(0);\\n        userCurrentSeat[_matchId][_user] = NO_SEAT;\\n\\n        emit SeatLeft(_matchId, currentSeatIdFromFrontend, _user, block.timestamp);\\n    }\\n\\n    /**\\n     * @dev \\u89c2\\u4f17\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u6307\\u5b9a\\u9009\\u624b\\u52a0\\u6cb9\\uff0c\\u589e\\u52a0\\u8be5\\u9009\\u624b\\u83b7\\u5f97\\u7684\\u70ed\\u529b\\u503c\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _fighterToCheerFor \\u8981\\u4e3a\\u5176\\u52a0\\u6cb9\\u7684\\u9009\\u624b\\u5730\\u5740\\u3002\\n     * @param _cheerPoints \\u672c\\u6b21\\u52a0\\u6cb9\\u589e\\u52a0\\u7684\\u70ed\\u529b\\u70b9\\u6570\\u3002\\n     */\\n    function cheerForFighter(uint256 _matchId, address _fighterToCheerFor, uint256 _cheerPoints) external {\\n        address _audienceMember = msg.sender;\\n        require(_matchId > 0, \\\"AudienceManager: Invalid matchId\\\");\\n        require(_cheerPoints > 0, \\\"AudienceManager: Cheer points must be greater than 0\\\");\\n        require(userCurrentSeat[_matchId][_audienceMember] != NO_SEAT, \\\"AudienceManager: You need to take a seat first\\\");\\n\\n        // \\u9a8c\\u8bc1\\u52a0\\u6cb9\\u76ee\\u6807\\u662f\\u5426\\u4e3a\\u672c\\u573a\\u6bd4\\u8d5b\\u7684\\u5408\\u6cd5\\u9009\\u624b\\n        address[2] memory currentFighters = activeFightersInMatch[_matchId];\\n        require(currentFighters[0] != address(0) && currentFighters[1] != address(0), \\\"AudienceManager: The fighters for this match have not been set\\\");\\n        require(\\n            _fighterToCheerFor == currentFighters[0] || _fighterToCheerFor == currentFighters[1],\\n            \\\"AudienceManager: The target for cheering is not a valid fighter for this match\\\"\\n        );\\n\\n        uint256 currentHeat = fighterAudienceHeat[_matchId][_fighterToCheerFor][_audienceMember];\\n        uint256 newHeat = currentHeat + _cheerPoints;\\n\\n        fighterAudienceHeat[_matchId][_fighterToCheerFor][_audienceMember] = newHeat;\\n\\n        emit FighterCheered(_matchId, _fighterToCheerFor, _audienceMember, newHeat, _cheerPoints, block.timestamp);\\n    }\\n\\n    // --- \\u53ea\\u8bfb (View) \\u51fd\\u6570 ---\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u6307\\u5b9a\\u5ea7\\u4f4d\\u4e0a\\u7684\\u5360\\u7528\\u8005\\u5730\\u5740\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _seatIdFromFrontend \\u8981\\u68c0\\u67e5\\u7684\\u5ea7\\u4f4dID (1 \\u5230 TOTAL_SEATS)\\u3002\\n     * @return \\u5360\\u7528\\u8005\\u5730\\u5740\\u3002\\n     */\\n    function getSeatOccupant(uint256 _matchId, uint256 _seatIdFromFrontend) external view returns (address) {\\n        require(_seatIdFromFrontend > 0 && _seatIdFromFrontend <= TOTAL_SEATS, \\\"AudienceManager: Invalid seatId\\\");\\n        return seatOccupants[_matchId][_seatIdFromFrontend - 1];\\n    }\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u6307\\u5b9a\\u7528\\u6237\\u5728\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u5ea7\\u4f4dID\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _user \\u7528\\u6237\\u5730\\u5740\\u3002\\n     * @return \\u7528\\u6237\\u5360\\u7528\\u7684\\u5ea7\\u4f4dID (1-indexed, \\u6216 NO_SEAT(0))\\u3002\\n     */\\n    function getUserSeatId(uint256 _matchId, address _user) external view returns (uint256) {\\n        return userCurrentSeat[_matchId][_user];\\n    }\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u6307\\u5b9a\\u89c2\\u4f17\\u4e3a\\u6307\\u5b9a\\u6bd4\\u8d5b\\u4e2d\\u7684\\u6307\\u5b9a\\u9009\\u624b\\u8d21\\u732e\\u7684\\u603b\\u70ed\\u529b\\u503c\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _fighter \\u9009\\u624b\\u5730\\u5740\\u3002\\n     * @param _audienceMember \\u89c2\\u4f17\\u5730\\u5740\\u3002\\n     * @return uint256 \\u70ed\\u529b\\u503c\\u3002\\n     */\\n    function getAudienceHeatForFighter(uint256 _matchId, address _fighter, address _audienceMember) external view returns (uint256) {\\n        return fighterAudienceHeat[_matchId][_fighter][_audienceMember];\\n    }\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u6307\\u5b9a\\u6bd4\\u8d5bID\\u7684\\u4e24\\u4f4d\\u6d3b\\u8dc3\\u9009\\u624b\\u5730\\u5740\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @return address[2] memory \\u5305\\u542b\\u4e24\\u4f4d\\u9009\\u624b\\u5730\\u5740\\u7684\\u6570\\u7ec4; \\u5982\\u679c\\u672a\\u8bbe\\u7f6e\\u5219\\u5730\\u5740\\u4e3a address(0)\\u3002\\n     */\\n    function getActiveFighters(uint256 _matchId) external view returns (address[2] memory) {\\n        return activeFightersInMatch[_matchId];\\n    }\\n    \\n    /**\\n     * @dev \\u83b7\\u53d6\\u6307\\u5b9a\\u6bd4\\u8d5bID\\u7684\\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u4fe1\\u606f\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @return seatIds_ \\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u7684ID\\u6570\\u7ec4 (1-indexed)\\u3002\\n     * @return occupants_ \\u5df2\\u5360\\u7528\\u5ea7\\u4f4d\\u7684\\u5360\\u7528\\u8005\\u5730\\u5740\\u6570\\u7ec4\\u3002\\n     */\\n    function getOccupiedSeatInfo(uint256 _matchId) external view returns (uint256[] memory seatIds_, address[] memory occupants_) {\\n        uint256 occupiedCount = 0;\\n        for (uint256 i = 0; i < TOTAL_SEATS; i++) {\\n            if (seatOccupants[_matchId][i] != address(0)) {\\n                occupiedCount++;\\n            }\\n        }\\n        if (occupiedCount == 0) {\\n            return (new uint256[](0), new address[](0));\\n        }\\n        seatIds_ = new uint256[](occupiedCount);\\n        occupants_ = new address[](occupiedCount);\\n        uint256 currentIndex = 0;\\n        for (uint256 i = 0; i < TOTAL_SEATS; i++) {\\n            if (seatOccupants[_matchId][i] != address(0)) {\\n                seatIds_[currentIndex] = i + 1; \\n                occupants_[currentIndex] = seatOccupants[_matchId][i];\\n                currentIndex++;\\n                if (currentIndex == occupiedCount) {\\n                    break;\\n                }\\n            }\\n        }\\n        return (seatIds_, occupants_);\\n    }\\n}\\n\",\"keccak256\":\"0x8b02bfdc76d9ce413ae17ae6672878e16a2bf97c13b99b04dab74b61ef48c87a\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060405161146238038061146283398101604081905261002f916100be565b806001600160a01b03811661005e57604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b6100678161006e565b50506100ee565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000602082840312156100d057600080fd5b81516001600160a01b03811681146100e757600080fd5b9392505050565b611365806100fd6000396000f3fe608060405234801561001057600080fd5b506004361061010b5760003560e01c80638da5cb5b116100a2578063bca3220e11610071578063bca3220e1461025a578063dc09fd291461026d578063f2fde38b14610280578063fdd1896a14610293578063ffa82e1a146102d157600080fd5b80638da5cb5b1461020257806394ed4bb51461021357806398cf4b3b14610226578063aeb75c861461023957600080fd5b80636292ad45116100de5780636292ad451461019c57806370e1118a146101af578063715018a6146101da5780638685733f146101e257600080fd5b806304c8e074146101105780630bcb253d146101545780634d6020bb1461017f578063608cad4314610194575b600080fd5b61014161011e3660046110c1565b600360209081526000938452604080852082529284528284209052825290205481565b6040519081526020015b60405180910390f35b6101676101623660046110fd565b610305565b6040516001600160a01b03909116815260200161014b565b61019261018d36600461111f565b610333565b005b610141603281565b6101926101aa366004611138565b6104fe565b6101416101bd36600461116d565b600260209081526000928352604080842090915290825290205481565b610192610879565b6101f56101f036600461111f565b61088d565b60405161014b9190611199565b6000546001600160a01b0316610167565b6101926102213660046110c1565b6108de565b61014161023436600461116d565b610a9d565b61024c61024736600461111f565b610ac7565b60405161014b9291906111d3565b6101676102683660046110fd565b610cb0565b61019261027b3660046110fd565b610d4b565b61019261028e366004611257565b610f5f565b6101416102a13660046110c1565b60009283526003602090815260408085206001600160a01b03948516865282528085209290931684525290205490565b6101676102df3660046110fd565b60016020908152600092835260408084209091529082529020546001600160a01b031681565b6004602052816000526040600020816002811061032157600080fd5b01546001600160a01b03169150829050565b338161035a5760405162461bcd60e51b815260040161035190611279565b60405180910390fd5b60008281526002602090815260408083206001600160a01b0385168452909152902054806103d95760405162461bcd60e51b815260206004820152602660248201527f41756469656e63654d616e616765723a20596f7520617265206e6f7420696e2060448201526518481cd9585d60d21b6064820152608401610351565b60006103e66001836112c4565b60008581526001602090815260408083208484529091529020549091506001600160a01b0384811691161461047c5760405162461bcd60e51b815260206004820152603660248201527f41756469656e63654d616e616765723a20596f7520617265206e6f7420746865604482015275081bd8d8dd5c185b9d081bd9881d1a1a5cc81cd9585d60521b6064820152608401610351565b6000848152600160209081526040808320848452825280832080546001600160a01b0319169055868352600282528083206001600160a01b0387168085529083528184209390935551428152849187917f733b5fb253da0fee681b46effd3c6c768c4f091f77bc6ae9db7ae7cf371cfbd291015b60405180910390a450505050565b338361051c5760405162461bcd60e51b815260040161035190611279565b600082116105895760405162461bcd60e51b815260206004820152603460248201527f41756469656e63654d616e616765723a20436865657220706f696e7473206d75604482015273073742062652067726561746572207468616e20360641b6064820152608401610351565b60008481526002602090815260408083206001600160a01b038516845290915290205461060f5760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a20596f75206e65656420746f2074616b60448201526d194818481cd9585d08199a5c9cdd60921b6064820152608401610351565b6000848152600460205260408082208151808301928390529160029082845b81546001600160a01b0316815260019091019060200180831161062e575050505050905060006001600160a01b031681600060028110610670576106706112d7565b60200201516001600160a01b031614158015610698575060208101516001600160a01b031615155b61070a5760405162461bcd60e51b815260206004820152603e60248201527f41756469656e63654d616e616765723a2054686520666967687465727320666f60448201527f722074686973206d617463682068617665206e6f74206265656e2073657400006064820152608401610351565b80516001600160a01b0385811691161480610734575060208101516001600160a01b038581169116145b6107bd5760405162461bcd60e51b815260206004820152604e60248201527f41756469656e63654d616e616765723a205468652074617267657420666f722060448201527f6368656572696e67206973206e6f7420612076616c696420666967687465722060648201526d0ccdee440e8d0d2e640dac2e8c6d60931b608482015260a401610351565b60008581526003602090815260408083206001600160a01b0380891685529083528184209086168452909152812054906107f785836112ed565b60008881526003602090815260408083206001600160a01b038b8116808652918452828520908a168086529084529382902085905581518581529283018a90524283830152905193945091928a917fdd5769a63930e4b63a19e52389f70593b3e9d94be5cbb0890bb0955e54a8c02c919081900360600190a450505050505050565b610881610f9d565b61088b6000610fca565b565b61089561101a565b600082815260046020526040908190208151808301928390529160029082845b81546001600160a01b031681526001909101906020018083116108b55750505050509050919050565b6108e6610f9d565b600083116109065760405162461bcd60e51b815260040161035190611279565b6001600160a01b0382161580159061092657506001600160a01b03811615155b61098a5760405162461bcd60e51b815260206004820152602f60248201527f41756469656e63654d616e616765723a20506c6179657220616464726573732060448201526e63616e6e6f7420626520656d70747960881b6064820152608401610351565b806001600160a01b0316826001600160a01b031603610a115760405162461bcd60e51b815260206004820152603860248201527f41756469656e63654d616e616765723a2054776f20706c61796572206164647260448201527f65737365732063616e6e6f74206265207468652073616d6500000000000000006064820152608401610351565b6040805180820182526001600160a01b03808516825283166020808301919091526000868152600490915291909120610a4b916002611038565b50604080516001600160a01b038481168252831660208201524281830152905184917f8b03e311e2e1fc355c0f98ba02c39dda06134eb00b1b712d201ae0c67ae6d4ca919081900360600190a2505050565b60008281526002602090815260408083206001600160a01b03851684529091529020545b92915050565b6060806000805b6032811015610b1f5760008581526001602090815260408083208484529091529020546001600160a01b031615610b0d5781610b0981611300565b9250505b80610b1781611300565b915050610ace565b5080600003610b4857505060408051600080825260208201908152818301909252939092509050565b8067ffffffffffffffff811115610b6157610b61611319565b604051908082528060200260200182016040528015610b8a578160200160208202803683370190505b5092508067ffffffffffffffff811115610ba657610ba6611319565b604051908082528060200260200182016040528015610bcf578160200160208202803683370190505b5091506000805b6032811015610ca85760008681526001602090815260408083208484529091529020546001600160a01b031615610c9657610c128160016112ed565b858381518110610c2457610c246112d7565b6020908102919091018101919091526000878152600182526040808220848352909252205484516001600160a01b0390911690859084908110610c6957610c696112d7565b6001600160a01b039092166020928302919091019091015281610c8b81611300565b925050828214610ca8575b80610ca081611300565b915050610bd6565b505050915091565b60008082118015610cc2575060328211155b610d0e5760405162461bcd60e51b815260206004820152601f60248201527f41756469656e63654d616e616765723a20496e76616c696420736561744964006044820152606401610351565b600083815260016020819052604082209190610d2a90856112c4565b81526020810191909152604001600020546001600160a01b03169392505050565b3382610d695760405162461bcd60e51b815260040161035190611279565b600082118015610d7a575060328211155b610dc65760405162461bcd60e51b815260206004820152601f60248201527f41756469656e63654d616e616765723a20496e76616c696420736561744964006044820152606401610351565b60008381526002602090815260408083206001600160a01b038516845290915290205415610e4d5760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a20596f75206861766520616c7265616460448201526d1e481d185ad95b8818481cd9585d60921b6064820152608401610351565b6000610e5a6001846112c4565b60008581526001602090815260408083208484529091529020549091506001600160a01b031615610ee45760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a2054686973207365617420697320616c60448201526d1c9958591e481bd8d8dd5c1a595960921b6064820152608401610351565b6000848152600160209081526040808320848452825280832080546001600160a01b0319166001600160a01b0387169081179091558784526002835281842081855283529281902086905551428152859187917fde7fb897d490f283cd7a5f055bd4347223d9ac1708e24a2515b1d91cc228e53591016104f0565b610f67610f9d565b6001600160a01b038116610f9157604051631e4fbdf760e01b815260006004820152602401610351565b610f9a81610fca565b50565b6000546001600160a01b0316331461088b5760405163118cdaa760e01b8152336004820152602401610351565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60405180604001604052806002906020820280368337509192915050565b8260028101928215611080579160200282015b8281111561108057825182546001600160a01b0319166001600160a01b0390911617825560209092019160019091019061104b565b5061108c929150611090565b5090565b5b8082111561108c5760008155600101611091565b80356001600160a01b03811681146110bc57600080fd5b919050565b6000806000606084860312156110d657600080fd5b833592506110e6602085016110a5565b91506110f4604085016110a5565b90509250925092565b6000806040838503121561111057600080fd5b50508035926020909101359150565b60006020828403121561113157600080fd5b5035919050565b60008060006060848603121561114d57600080fd5b8335925061115d602085016110a5565b9150604084013590509250925092565b6000806040838503121561118057600080fd5b82359150611190602084016110a5565b90509250929050565b60408101818360005b60028110156111ca5781516001600160a01b03168352602092830192909101906001016111a2565b50505092915050565b604080825283519082018190526000906020906060840190828701845b8281101561120c578151845292840192908401906001016111f0565b5050508381038285015284518082528583019183019060005b8181101561124a5783516001600160a01b031683529284019291840191600101611225565b5090979650505050505050565b60006020828403121561126957600080fd5b611272826110a5565b9392505050565b6020808252818101527f41756469656e63654d616e616765723a20496e76616c6964206d617463684964604082015260600190565b634e487b7160e01b600052601160045260246000fd5b81810381811115610ac157610ac16112ae565b634e487b7160e01b600052603260045260246000fd5b80820180821115610ac157610ac16112ae565b600060018201611312576113126112ae565b5060010190565b634e487b7160e01b600052604160045260246000fdfea26469706673582212204243fd3f86fae12d9c654500b40b2dfaa18241b51593c0056af16ceb0dd6f08c64736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061010b5760003560e01c80638da5cb5b116100a2578063bca3220e11610071578063bca3220e1461025a578063dc09fd291461026d578063f2fde38b14610280578063fdd1896a14610293578063ffa82e1a146102d157600080fd5b80638da5cb5b1461020257806394ed4bb51461021357806398cf4b3b14610226578063aeb75c861461023957600080fd5b80636292ad45116100de5780636292ad451461019c57806370e1118a146101af578063715018a6146101da5780638685733f146101e257600080fd5b806304c8e074146101105780630bcb253d146101545780634d6020bb1461017f578063608cad4314610194575b600080fd5b61014161011e3660046110c1565b600360209081526000938452604080852082529284528284209052825290205481565b6040519081526020015b60405180910390f35b6101676101623660046110fd565b610305565b6040516001600160a01b03909116815260200161014b565b61019261018d36600461111f565b610333565b005b610141603281565b6101926101aa366004611138565b6104fe565b6101416101bd36600461116d565b600260209081526000928352604080842090915290825290205481565b610192610879565b6101f56101f036600461111f565b61088d565b60405161014b9190611199565b6000546001600160a01b0316610167565b6101926102213660046110c1565b6108de565b61014161023436600461116d565b610a9d565b61024c61024736600461111f565b610ac7565b60405161014b9291906111d3565b6101676102683660046110fd565b610cb0565b61019261027b3660046110fd565b610d4b565b61019261028e366004611257565b610f5f565b6101416102a13660046110c1565b60009283526003602090815260408085206001600160a01b03948516865282528085209290931684525290205490565b6101676102df3660046110fd565b60016020908152600092835260408084209091529082529020546001600160a01b031681565b6004602052816000526040600020816002811061032157600080fd5b01546001600160a01b03169150829050565b338161035a5760405162461bcd60e51b815260040161035190611279565b60405180910390fd5b60008281526002602090815260408083206001600160a01b0385168452909152902054806103d95760405162461bcd60e51b815260206004820152602660248201527f41756469656e63654d616e616765723a20596f7520617265206e6f7420696e2060448201526518481cd9585d60d21b6064820152608401610351565b60006103e66001836112c4565b60008581526001602090815260408083208484529091529020549091506001600160a01b0384811691161461047c5760405162461bcd60e51b815260206004820152603660248201527f41756469656e63654d616e616765723a20596f7520617265206e6f7420746865604482015275081bd8d8dd5c185b9d081bd9881d1a1a5cc81cd9585d60521b6064820152608401610351565b6000848152600160209081526040808320848452825280832080546001600160a01b0319169055868352600282528083206001600160a01b0387168085529083528184209390935551428152849187917f733b5fb253da0fee681b46effd3c6c768c4f091f77bc6ae9db7ae7cf371cfbd291015b60405180910390a450505050565b338361051c5760405162461bcd60e51b815260040161035190611279565b600082116105895760405162461bcd60e51b815260206004820152603460248201527f41756469656e63654d616e616765723a20436865657220706f696e7473206d75604482015273073742062652067726561746572207468616e20360641b6064820152608401610351565b60008481526002602090815260408083206001600160a01b038516845290915290205461060f5760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a20596f75206e65656420746f2074616b60448201526d194818481cd9585d08199a5c9cdd60921b6064820152608401610351565b6000848152600460205260408082208151808301928390529160029082845b81546001600160a01b0316815260019091019060200180831161062e575050505050905060006001600160a01b031681600060028110610670576106706112d7565b60200201516001600160a01b031614158015610698575060208101516001600160a01b031615155b61070a5760405162461bcd60e51b815260206004820152603e60248201527f41756469656e63654d616e616765723a2054686520666967687465727320666f60448201527f722074686973206d617463682068617665206e6f74206265656e2073657400006064820152608401610351565b80516001600160a01b0385811691161480610734575060208101516001600160a01b038581169116145b6107bd5760405162461bcd60e51b815260206004820152604e60248201527f41756469656e63654d616e616765723a205468652074617267657420666f722060448201527f6368656572696e67206973206e6f7420612076616c696420666967687465722060648201526d0ccdee440e8d0d2e640dac2e8c6d60931b608482015260a401610351565b60008581526003602090815260408083206001600160a01b0380891685529083528184209086168452909152812054906107f785836112ed565b60008881526003602090815260408083206001600160a01b038b8116808652918452828520908a168086529084529382902085905581518581529283018a90524283830152905193945091928a917fdd5769a63930e4b63a19e52389f70593b3e9d94be5cbb0890bb0955e54a8c02c919081900360600190a450505050505050565b610881610f9d565b61088b6000610fca565b565b61089561101a565b600082815260046020526040908190208151808301928390529160029082845b81546001600160a01b031681526001909101906020018083116108b55750505050509050919050565b6108e6610f9d565b600083116109065760405162461bcd60e51b815260040161035190611279565b6001600160a01b0382161580159061092657506001600160a01b03811615155b61098a5760405162461bcd60e51b815260206004820152602f60248201527f41756469656e63654d616e616765723a20506c6179657220616464726573732060448201526e63616e6e6f7420626520656d70747960881b6064820152608401610351565b806001600160a01b0316826001600160a01b031603610a115760405162461bcd60e51b815260206004820152603860248201527f41756469656e63654d616e616765723a2054776f20706c61796572206164647260448201527f65737365732063616e6e6f74206265207468652073616d6500000000000000006064820152608401610351565b6040805180820182526001600160a01b03808516825283166020808301919091526000868152600490915291909120610a4b916002611038565b50604080516001600160a01b038481168252831660208201524281830152905184917f8b03e311e2e1fc355c0f98ba02c39dda06134eb00b1b712d201ae0c67ae6d4ca919081900360600190a2505050565b60008281526002602090815260408083206001600160a01b03851684529091529020545b92915050565b6060806000805b6032811015610b1f5760008581526001602090815260408083208484529091529020546001600160a01b031615610b0d5781610b0981611300565b9250505b80610b1781611300565b915050610ace565b5080600003610b4857505060408051600080825260208201908152818301909252939092509050565b8067ffffffffffffffff811115610b6157610b61611319565b604051908082528060200260200182016040528015610b8a578160200160208202803683370190505b5092508067ffffffffffffffff811115610ba657610ba6611319565b604051908082528060200260200182016040528015610bcf578160200160208202803683370190505b5091506000805b6032811015610ca85760008681526001602090815260408083208484529091529020546001600160a01b031615610c9657610c128160016112ed565b858381518110610c2457610c246112d7565b6020908102919091018101919091526000878152600182526040808220848352909252205484516001600160a01b0390911690859084908110610c6957610c696112d7565b6001600160a01b039092166020928302919091019091015281610c8b81611300565b925050828214610ca8575b80610ca081611300565b915050610bd6565b505050915091565b60008082118015610cc2575060328211155b610d0e5760405162461bcd60e51b815260206004820152601f60248201527f41756469656e63654d616e616765723a20496e76616c696420736561744964006044820152606401610351565b600083815260016020819052604082209190610d2a90856112c4565b81526020810191909152604001600020546001600160a01b03169392505050565b3382610d695760405162461bcd60e51b815260040161035190611279565b600082118015610d7a575060328211155b610dc65760405162461bcd60e51b815260206004820152601f60248201527f41756469656e63654d616e616765723a20496e76616c696420736561744964006044820152606401610351565b60008381526002602090815260408083206001600160a01b038516845290915290205415610e4d5760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a20596f75206861766520616c7265616460448201526d1e481d185ad95b8818481cd9585d60921b6064820152608401610351565b6000610e5a6001846112c4565b60008581526001602090815260408083208484529091529020549091506001600160a01b031615610ee45760405162461bcd60e51b815260206004820152602e60248201527f41756469656e63654d616e616765723a2054686973207365617420697320616c60448201526d1c9958591e481bd8d8dd5c1a595960921b6064820152608401610351565b6000848152600160209081526040808320848452825280832080546001600160a01b0319166001600160a01b0387169081179091558784526002835281842081855283529281902086905551428152859187917fde7fb897d490f283cd7a5f055bd4347223d9ac1708e24a2515b1d91cc228e53591016104f0565b610f67610f9d565b6001600160a01b038116610f9157604051631e4fbdf760e01b815260006004820152602401610351565b610f9a81610fca565b50565b6000546001600160a01b0316331461088b5760405163118cdaa760e01b8152336004820152602401610351565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60405180604001604052806002906020820280368337509192915050565b8260028101928215611080579160200282015b8281111561108057825182546001600160a01b0319166001600160a01b0390911617825560209092019160019091019061104b565b5061108c929150611090565b5090565b5b8082111561108c5760008155600101611091565b80356001600160a01b03811681146110bc57600080fd5b919050565b6000806000606084860312156110d657600080fd5b833592506110e6602085016110a5565b91506110f4604085016110a5565b90509250925092565b6000806040838503121561111057600080fd5b50508035926020909101359150565b60006020828403121561113157600080fd5b5035919050565b60008060006060848603121561114d57600080fd5b8335925061115d602085016110a5565b9150604084013590509250925092565b6000806040838503121561118057600080fd5b82359150611190602084016110a5565b90509250929050565b60408101818360005b60028110156111ca5781516001600160a01b03168352602092830192909101906001016111a2565b50505092915050565b604080825283519082018190526000906020906060840190828701845b8281101561120c578151845292840192908401906001016111f0565b5050508381038285015284518082528583019183019060005b8181101561124a5783516001600160a01b031683529284019291840191600101611225565b5090979650505050505050565b60006020828403121561126957600080fd5b611272826110a5565b9392505050565b6020808252818101527f41756469656e63654d616e616765723a20496e76616c6964206d617463684964604082015260600190565b634e487b7160e01b600052601160045260246000fd5b81810381811115610ac157610ac16112ae565b634e487b7160e01b600052603260045260246000fd5b80820180821115610ac157610ac16112ae565b600060018201611312576113126112ae565b5060010190565b634e487b7160e01b600052604160045260246000fdfea26469706673582212204243fd3f86fae12d9c654500b40b2dfaa18241b51593c0056af16ceb0dd6f08c64736f6c63430008140033",
+  "devdoc": {
+    "details": "管理特定比赛的观众席位、入座以及观众为特定选手的加油热力值。 座位ID从1开始，0代表未占座。",
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "cheerForFighter(uint256,address,uint256)": {
+        "details": "观众为指定比赛中的指定选手加油，增加该选手获得的热力值。",
+        "params": {
+          "_cheerPoints": "本次加油增加的热力点数。",
+          "_fighterToCheerFor": "要为其加油的选手地址。",
+          "_matchId": "比赛ID。"
+        }
+      },
+      "getActiveFighters(uint256)": {
+        "details": "获取指定比赛ID的两位活跃选手地址。",
+        "params": {
+          "_matchId": "比赛ID。"
+        },
+        "returns": {
+          "_0": "address[2] memory 包含两位选手地址的数组; 如果未设置则地址为 address(0)。"
+        }
+      },
+      "getAudienceHeatForFighter(uint256,address,address)": {
+        "details": "获取指定观众为指定比赛中的指定选手贡献的总热力值。",
+        "params": {
+          "_audienceMember": "观众地址。",
+          "_fighter": "选手地址。",
+          "_matchId": "比赛ID。"
+        },
+        "returns": {
+          "_0": "uint256 热力值。"
+        }
+      },
+      "getOccupiedSeatInfo(uint256)": {
+        "details": "获取指定比赛ID的已占用座位信息。",
+        "params": {
+          "_matchId": "比赛ID。"
+        },
+        "returns": {
+          "occupants_": "已占用座位的占用者地址数组。",
+          "seatIds_": "已占用座位的ID数组 (1-indexed)。"
+        }
+      },
+      "getSeatOccupant(uint256,uint256)": {
+        "details": "获取指定座位上的占用者地址。",
+        "params": {
+          "_matchId": "比赛ID。",
+          "_seatIdFromFrontend": "要检查的座位ID (1 到 TOTAL_SEATS)。"
+        },
+        "returns": {
+          "_0": "占用者地址。"
+        }
+      },
+      "getUserSeatId(uint256,address)": {
+        "details": "获取指定用户在指定比赛中的座位ID。",
+        "params": {
+          "_matchId": "比赛ID。",
+          "_user": "用户地址。"
+        },
+        "returns": {
+          "_0": "用户占用的座位ID (1-indexed, 或 NO_SEAT(0))。"
+        }
+      },
+      "leaveSeat(uint256)": {
+        "details": "用户离开当前在指定比赛中占据的座位。",
+        "params": {
+          "_matchId": "比赛ID。"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "setActiveFighters(uint256,address,address)": {
+        "details": "设置某场比赛的活跃对战选手。应在比赛正式开始前由管理员或主比赛合约调用。",
+        "params": {
+          "_matchId": "比赛ID。",
+          "_player1": "选手1的地址。",
+          "_player2": "选手2的地址。"
+        }
+      },
+      "takeSeat(uint256,uint256)": {
+        "details": "用户为指定比赛选择并占据一个座位。",
+        "params": {
+          "_matchId": "要加入的比赛ID。",
+          "_seatIdFromFrontend": "要选择的座位ID (1 到 TOTAL_SEATS)。"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "title": "观众管理合约",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8,
+        "contract": "contracts/AudienceManager.sol:AudienceManager",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 195,
+        "contract": "contracts/AudienceManager.sol:AudienceManager",
+        "label": "seatOccupants",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_uint256,t_mapping(t_uint256,t_address))"
+      },
+      {
+        "astId": 201,
+        "contract": "contracts/AudienceManager.sol:AudienceManager",
+        "label": "userCurrentSeat",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))"
+      },
+      {
+        "astId": 209,
+        "contract": "contracts/AudienceManager.sol:AudienceManager",
+        "label": "fighterAudienceHeat",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_uint256,t_mapping(t_address,t_mapping(t_address,t_uint256)))"
+      },
+      {
+        "astId": 215,
+        "contract": "contracts/AudienceManager.sol:AudienceManager",
+        "label": "activeFightersInMatch",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_uint256,t_array(t_address)2_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)2_storage": {
+        "base": "t_address",
+        "encoding": "inplace",
+        "label": "address[2]",
+        "numberOfBytes": "64"
+      },
+      "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => mapping(address => uint256))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_uint256)"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_mapping(t_uint256,t_address)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => address)",
+        "numberOfBytes": "32",
+        "value": "t_address"
+      },
+      "t_mapping(t_uint256,t_array(t_address)2_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => address[2])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_address)2_storage"
+      },
+      "t_mapping(t_uint256,t_mapping(t_address,t_mapping(t_address,t_uint256)))": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => mapping(address => mapping(address => uint256)))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_mapping(t_address,t_uint256))"
+      },
+      "t_mapping(t_uint256,t_mapping(t_address,t_uint256))": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => mapping(address => uint256))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_uint256)"
+      },
+      "t_mapping(t_uint256,t_mapping(t_uint256,t_address))": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => mapping(uint256 => address))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_uint256,t_address)"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

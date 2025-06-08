@@ -1,0 +1,879 @@
+{
+  "address": "0x0769f9B1d1772349Fe8FAFd9F6B83B0832a27cEf",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_initialOwner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_immortalBlockAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_audienceManagerAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_refereeAddr",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "questionIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isCorrect",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newScorePlayerA",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newScorePlayerB",
+          "type": "uint256"
+        }
+      ],
+      "name": "AnswerResultSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "finalScorePlayerA",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "finalScorePlayerB",
+          "type": "uint256"
+        }
+      ],
+      "name": "MatchConcluded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "playerA",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "playerB",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "firstPlayerTurn",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "startTime",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "firstQuestionDeadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "MatchStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "playerAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "consecutiveWrong",
+          "type": "uint8"
+        }
+      ],
+      "name": "PlayerBecameReplaceable",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldPlayer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newPlayer",
+          "type": "address"
+        }
+      ],
+      "name": "PlayerReplaced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nextQuestionIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nextPlayerTurn",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newDeadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "PlayerTurnAdvanced",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "ANSWER_TIMEOUT_DURATION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_CONSECUTIVE_WRONG_ANSWERS_FOR_REPLACEMENT",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "TOTAL_QUESTIONS",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "audienceManagerContractAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "immortalBlockContractAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "matches",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "matchId",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "playerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "score",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "consecutiveWrongAnswers",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isActive",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct MatchContract.PlayerMatchState",
+          "name": "playerA",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "playerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "score",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "consecutiveWrongAnswers",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isActive",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct MatchContract.PlayerMatchState",
+          "name": "playerB",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint8",
+          "name": "currentQuestionIndex",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "currentPlayerTurn",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "currentQuestionDeadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum MatchContract.MatchStatus",
+          "name": "status",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "refereeAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_playerToReplace",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_newPlayer",
+          "type": "address"
+        }
+      ],
+      "name": "replacePlayer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setAudienceManagerContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setImmortalBlockContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setRefereeAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_playerA",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_playerB",
+          "type": "address"
+        }
+      ],
+      "name": "startMatch",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_matchId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_playerWhoAnswered",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_questionIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "_isCorrect",
+          "type": "bool"
+        }
+      ],
+      "name": "submitAnswerResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xd26278e1d55c8e001631480e400cacf24fbbb54bbd0d3ab6a3114f5843b2b5ab",
+  "receipt": {
+    "to": null,
+    "from": "0x8d6184D01C461d53044094c6e8850bf60604dDA2",
+    "contractAddress": "0x0769f9B1d1772349Fe8FAFd9F6B83B0832a27cEf",
+    "transactionIndex": 6,
+    "gasUsed": "1609606",
+    "logsBloom": "0x00000000000000000000000000000040000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001800000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000002000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000020000200000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x965deb04f5640f85d879ce895f461bbe8dd7d7dee17c026c9e72a6316c930726",
+    "transactionHash": "0xd26278e1d55c8e001631480e400cacf24fbbb54bbd0d3ab6a3114f5843b2b5ab",
+    "logs": [
+      {
+        "transactionIndex": 6,
+        "blockNumber": 20629956,
+        "transactionHash": "0xd26278e1d55c8e001631480e400cacf24fbbb54bbd0d3ab6a3114f5843b2b5ab",
+        "address": "0x0769f9B1d1772349Fe8FAFd9F6B83B0832a27cEf",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000008d6184d01c461d53044094c6e8850bf60604dda2"
+        ],
+        "data": "0x",
+        "logIndex": 26,
+        "blockHash": "0x965deb04f5640f85d879ce895f461bbe8dd7d7dee17c026c9e72a6316c930726"
+      }
+    ],
+    "blockNumber": 20629956,
+    "cumulativeGasUsed": "2716901",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x8d6184D01C461d53044094c6e8850bf60604dDA2",
+    "0x4E810572FBEB16bf58c6e94CDD9009130e3B04d5",
+    "0x1bbE773134E6aC83541C3baCF384f55E5d50F0Ae",
+    "0x8d6184D01C461d53044094c6e8850bf60604dDA2"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "9c31133fffffde4826cff076505bdc89",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_initialOwner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_immortalBlockAddr\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_audienceManagerAddr\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_refereeAddr\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"questionIndex\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isCorrect\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newScorePlayerA\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newScorePlayerB\",\"type\":\"uint256\"}],\"name\":\"AnswerResultSubmitted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"finalScorePlayerA\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"finalScorePlayerB\",\"type\":\"uint256\"}],\"name\":\"MatchConcluded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"playerA\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"playerB\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"firstPlayerTurn\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"firstQuestionDeadline\",\"type\":\"uint256\"}],\"name\":\"MatchStarted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"playerAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"consecutiveWrong\",\"type\":\"uint8\"}],\"name\":\"PlayerBecameReplaceable\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldPlayer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newPlayer\",\"type\":\"address\"}],\"name\":\"PlayerReplaced\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nextQuestionIndex\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"nextPlayerTurn\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newDeadline\",\"type\":\"uint256\"}],\"name\":\"PlayerTurnAdvanced\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ANSWER_TIMEOUT_DURATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_CONSECUTIVE_WRONG_ANSWERS_FOR_REPLACEMENT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"TOTAL_QUESTIONS\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"audienceManagerContractAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"immortalBlockContractAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"matches\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"matchId\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"playerAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"score\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"consecutiveWrongAnswers\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"internalType\":\"struct MatchContract.PlayerMatchState\",\"name\":\"playerA\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"playerAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"score\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"consecutiveWrongAnswers\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"internalType\":\"struct MatchContract.PlayerMatchState\",\"name\":\"playerB\",\"type\":\"tuple\"},{\"internalType\":\"uint8\",\"name\":\"currentQuestionIndex\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"currentPlayerTurn\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"currentQuestionDeadline\",\"type\":\"uint256\"},{\"internalType\":\"enum MatchContract.MatchStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"refereeAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_playerToReplace\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_newPlayer\",\"type\":\"address\"}],\"name\":\"replacePlayer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newAddress\",\"type\":\"address\"}],\"name\":\"setAudienceManagerContract\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newAddress\",\"type\":\"address\"}],\"name\":\"setImmortalBlockContract\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newAddress\",\"type\":\"address\"}],\"name\":\"setRefereeAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_playerA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_playerB\",\"type\":\"address\"}],\"name\":\"startMatch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_matchId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_playerWhoAnswered\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_questionIndex\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"_isCorrect\",\"type\":\"bool\"}],\"name\":\"submitAnswerResult\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"replacePlayer(uint256,address,address)\":{\"details\":\"\\u7531\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff0c\\u7528\\u4e00\\u540d\\u65b0\\u9009\\u624b\\u66ff\\u6362\\u573a\\u4e0a\\u5f53\\u524d\\u5904\\u4e8e\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\u7684\\u9009\\u624b\\u3002 \\u65b0\\u9009\\u624b\\u5c06\\u7ee7\\u627f\\u88ab\\u66ff\\u6362\\u9009\\u624b\\u7684\\u5f97\\u5206\\uff0c\\u4f46\\u8fde\\u7eed\\u7b54\\u9519\\u6b21\\u6570\\u91cd\\u7f6e\\u4e3a0\\u3002 \\u6bd4\\u8d5b\\u72b6\\u6001\\u5c06\\u6062\\u590d\\u4e3a InProgress\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\",\"_newPlayer\":\"\\u5c06\\u4e0a\\u573a\\u66ff\\u6362\\u7684\\u65b0\\u9009\\u624b\\u7684\\u5730\\u5740\\uff08\\u539f\\u89c2\\u4f17\\uff09\\u3002\",\"_playerToReplace\":\"\\u5c06\\u88ab\\u66ff\\u6362\\u7684\\u573a\\u4e0a\\u9009\\u624b\\u7684\\u5730\\u5740\\u3002\"}},\"startMatch(uint256,address,address)\":{\"details\":\"\\u7531\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff0c\\u7528\\u4e8e\\u521d\\u59cb\\u5316\\u5e76\\u5f00\\u59cb\\u4e00\\u573a\\u65b0\\u7684\\u6bd4\\u8d5b\\u3002\",\"params\":{\"_matchId\":\"\\u6bd4\\u8d5bID\\uff0c\\u5e94\\u4e0e MatchRegistry \\u4e2d\\u751f\\u6210\\u7684\\u4e00\\u81f4\\u3002\",\"_playerA\":\"\\u9009\\u624bA\\u7684\\u5730\\u5740\\u3002\",\"_playerB\":\"\\u9009\\u624bB\\u7684\\u5730\\u5740\\u3002\"}},\"submitAnswerResult(uint256,address,uint256,bool)\":{\"details\":\"\\u7531\\u88c1\\u5224\\u8c03\\u7528\\uff0c\\u63d0\\u4ea4\\u9009\\u624b\\u5bf9\\u5f53\\u524d\\u95ee\\u9898\\u7684\\u56de\\u7b54\\u7ed3\\u679c\\u3002 \\u5373\\u4f7f\\u9009\\u624b\\u8fdb\\u5165\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\uff0c\\u6bd4\\u8d5b\\u4e5f\\u4f1a\\u7ee7\\u7eed\\u8fdb\\u884c\\u3002\",\"params\":{\"_isCorrect\":\"\\u56de\\u7b54\\u662f\\u5426\\u6b63\\u786e\\u3002\",\"_matchId\":\"\\u6bd4\\u8d5bID\\u3002\",\"_playerWhoAnswered\":\"\\u56de\\u7b54\\u95ee\\u9898\\u7684\\u9009\\u624b\\u5730\\u5740\\u3002\",\"_questionIndex\":\"\\u56de\\u7b54\\u7684\\u95ee\\u9898\\u7d22\\u5f15\\u3002\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/MatchContract.sol\":\"MatchContract\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/MatchContract.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\n// \\u53ef\\u9009\\uff1a\\u5bfc\\u5165\\u5176\\u4ed6\\u5408\\u7ea6\\u7684\\u63a5\\u53e3\\n// import \\\"./IImmortalBlock.sol\\\"; // \\u5047\\u8bbe\\u4f60\\u4e3a ImmortalBlock \\u521b\\u5efa\\u4e86\\u63a5\\u53e3\\n// import \\\"./IAudienceManager.sol\\\"; // \\u5047\\u8bbe\\u4f60\\u4e3a AudienceManager \\u521b\\u5efa\\u4e86\\u63a5\\u53e3\\n\\ncontract MatchContract is Ownable {\\n    // --- \\u5e38\\u91cf ---\\n    uint8 public constant TOTAL_QUESTIONS = 10; // \\u6bcf\\u573a\\u6bd4\\u8d5b\\u7684\\u603b\\u9898\\u76ee\\u6570\\u91cf\\n    uint256 public constant ANSWER_TIMEOUT_DURATION = 60 seconds; // \\u6bcf\\u9898\\u56de\\u7b54\\u65f6\\u9650\\uff08\\u4f8b\\u598260\\u79d2\\uff09\\n    uint8 public constant MAX_CONSECUTIVE_WRONG_ANSWERS_FOR_REPLACEMENT = 3; // \\u89e6\\u53d1\\u66ff\\u6362\\u7684\\u8fde\\u7eed\\u7b54\\u9519\\u6b21\\u6570\\n\\n    // --- \\u4f9d\\u8d56\\u5408\\u7ea6\\u5730\\u5740 ---\\n    address public immortalBlockContractAddress;\\n    address public audienceManagerContractAddress;\\n    address public refereeAddress; // \\u201cAI\\u88c1\\u5224\\u201d\\u6216\\u6709\\u6743\\u63d0\\u4ea4\\u6bd4\\u8d5b\\u7ed3\\u679c\\u7684\\u7ba1\\u7406\\u5458\\u5730\\u5740\\n\\n    // --- \\u6570\\u636e\\u7ed3\\u6784 ---\\n    struct PlayerMatchState {\\n        address playerAddress;\\n        uint256 score;\\n        uint8 consecutiveWrongAnswers;\\n        bool isActive; // \\u6807\\u8bb0\\u9009\\u624b\\u662f\\u5426\\u4ecd\\u5728\\u573a\\u4e0a\\n    }\\n\\n    enum MatchStatus {\\n        NotStarted, // \\u6bd4\\u8d5b\\u5c1a\\u672a\\u521b\\u5efa\\u6216\\u521d\\u59cb\\u5316 (\\u9ed8\\u8ba4\\u72b6\\u6001)\\n        AwaitingFirstQuestion, // \\u9009\\u624b\\u5df2\\u786e\\u5b9a\\uff0c\\u7b49\\u5f85\\u7b2c\\u4e00\\u9898\\u5f00\\u59cb (\\u53ef\\u9009\\u72b6\\u6001)\\n        InProgress, // \\u6bd4\\u8d5b\\u8fdb\\u884c\\u4e2d\\uff0c\\u9009\\u624b\\u6b63\\u5728\\u7b54\\u9898\\n        PlayerAReplaceable, // A\\u9009\\u624b\\u8fbe\\u5230\\u53ef\\u88ab\\u66ff\\u6362\\u6761\\u4ef6\\n        PlayerBReplaceable, // B\\u9009\\u624b\\u8fbe\\u5230\\u53ef\\u88ab\\u66ff\\u6362\\u6761\\u4ef6\\n        Concluded // \\u6bd4\\u8d5b\\u5df2\\u7ed3\\u675f\\n    }\\n\\n    struct Match {\\n        uint256 matchId;\\n        PlayerMatchState playerA;\\n        PlayerMatchState playerB;\\n        uint8 currentQuestionIndex;\\n        address currentPlayerTurn;\\n        uint256 currentQuestionDeadline;\\n        MatchStatus status;\\n        address winner;\\n    }\\n\\n    mapping(uint256 => Match) public matches;\\n\\n    // --- \\u4e8b\\u4ef6 ---\\n    event MatchStarted(\\n        uint256 indexed matchId,\\n        address indexed playerA,\\n        address indexed playerB,\\n        address firstPlayerTurn, // \\u8c01\\u5148\\u624b\\n        uint256 startTime,\\n        uint256 firstQuestionDeadline\\n    );\\n    // ... (\\u5176\\u4ed6\\u4e8b\\u4ef6\\u4fdd\\u6301\\u4e0d\\u53d8)\\n    event AnswerResultSubmitted(\\n        uint256 indexed matchId,\\n        uint256 indexed questionIndex,\\n        address indexed player,\\n        bool isCorrect,\\n        uint256 newScorePlayerA,\\n        uint256 newScorePlayerB\\n    );\\n    event PlayerTurnAdvanced(\\n        uint256 indexed matchId,\\n        uint256 nextQuestionIndex,\\n        address nextPlayerTurn,\\n        uint256 newDeadline\\n    );\\n    event PlayerBecameReplaceable(uint256 indexed matchId, address indexed playerAddress, uint8 consecutiveWrong);\\n    event PlayerReplaced(uint256 indexed matchId, address indexed oldPlayer, address indexed newPlayer);\\n    event MatchConcluded(\\n        uint256 indexed matchId,\\n        address indexed winner,\\n        uint256 finalScorePlayerA,\\n        uint256 finalScorePlayerB\\n    );\\n\\n    // --- \\u6784\\u9020\\u51fd\\u6570 ---\\n    constructor(\\n        address _initialOwner,\\n        address _immortalBlockAddr,\\n        address _audienceManagerAddr,\\n        address _refereeAddr\\n    ) Ownable(_initialOwner) {\\n        require(_immortalBlockAddr != address(0), \\\"MatchContract: Invalid immortal block contract address\\\");\\n        require(_audienceManagerAddr != address(0), \\\"MatchContract: Invalid audience manager contract address\\\");\\n        require(_refereeAddr != address(0), \\\"MatchContract: Invalid referee address\\\");\\n\\n        immortalBlockContractAddress = _immortalBlockAddr;\\n        audienceManagerContractAddress = _audienceManagerAddr;\\n        refereeAddress = _refereeAddr;\\n    }\\n\\n    // --- \\u4fee\\u9970\\u7b26 ---\\n    modifier onlyReferee() {\\n        require(msg.sender == refereeAddress, \\\"MatchContract: Caller is not the authorized referee\\\");\\n        _;\\n    }\\n\\n    // --- Owner\\u4e13\\u5c5e\\u51fd\\u6570 (\\u7528\\u4e8e\\u8bbe\\u7f6e\\u548c\\u66f4\\u65b0\\u5173\\u952e\\u5730\\u5740) ---\\n    function setImmortalBlockContract(address _newAddress) external onlyOwner {\\n        require(_newAddress != address(0), \\\"MatchContract: Invalid immortal block contract address\\\");\\n        immortalBlockContractAddress = _newAddress;\\n    }\\n\\n    function setAudienceManagerContract(address _newAddress) external onlyOwner {\\n        require(_newAddress != address(0), \\\"MatchContract: Invalid audience manager contract address\\\");\\n        audienceManagerContractAddress = _newAddress;\\n    }\\n\\n    function setRefereeAddress(address _newAddress) external onlyOwner {\\n        require(_newAddress != address(0), \\\"MatchContract: Invalid referee address\\\");\\n        refereeAddress = _newAddress;\\n    }\\n\\n    // --- \\u6838\\u5fc3\\u529f\\u80fd\\u51fd\\u6570 ---\\n\\n    /**\\n     * @dev \\u7531\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff0c\\u7528\\u4e8e\\u521d\\u59cb\\u5316\\u5e76\\u5f00\\u59cb\\u4e00\\u573a\\u65b0\\u7684\\u6bd4\\u8d5b\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\uff0c\\u5e94\\u4e0e MatchRegistry \\u4e2d\\u751f\\u6210\\u7684\\u4e00\\u81f4\\u3002\\n     * @param _playerA \\u9009\\u624bA\\u7684\\u5730\\u5740\\u3002\\n     * @param _playerB \\u9009\\u624bB\\u7684\\u5730\\u5740\\u3002\\n     */\\n    function startMatch(uint256 _matchId, address _playerA, address _playerB) external onlyOwner {\\n        // \\u6743\\u9650\\uff1a\\u53ea\\u6709\\u5408\\u7ea6\\u62e5\\u6709\\u8005\\uff08\\u7ba1\\u7406\\u5458\\uff09\\u53ef\\u4ee5\\u5f00\\u59cb\\u6bd4\\u8d5b\\n        // \\u68c0\\u67e51\\uff1a\\u8f93\\u5165\\u53c2\\u6570\\u6709\\u6548\\u6027\\n        require(_matchId > 0, \\\"MatchContract: MatchId must be greater than 0\\\");\\n        require(_playerA != address(0) && _playerB != address(0), \\\"MatchContract: Player address cannot be empty\\\");\\n        require(_playerA != _playerB, \\\"MatchContract: Two player addresses cannot be the same\\\");\\n\\n        // \\u68c0\\u67e52\\uff1a\\u786e\\u4fdd\\u8be5 matchId \\u7684\\u6bd4\\u8d5b\\u5c1a\\u672a\\u5f00\\u59cb\\u6216\\u4e0d\\u5b58\\u5728\\n        // Match \\u7ed3\\u6784\\u4f53\\u7684\\u9ed8\\u8ba4\\u72b6\\u6001 status \\u4f1a\\u662f 0 (\\u5373 NotStarted)\\n        // \\u540c\\u65f6\\u68c0\\u67e5 playerA \\u5730\\u5740\\u662f\\u5426\\u4e3a0\\uff0c\\u4e5f\\u80fd\\u5224\\u65ad\\u662f\\u5426\\u5df2\\u88ab\\u521d\\u59cb\\u5316\\n        Match storage existingMatch = matches[_matchId];\\n        require(\\n            existingMatch.playerA.playerAddress == address(0) && existingMatch.status == MatchStatus.NotStarted,\\n            \\\"MatchContract: The matchId already exists or has started\\\"\\n        );\\n\\n        // \\u521d\\u59cb\\u5316\\u6bd4\\u8d5b\\u6570\\u636e\\n        Match storage newMatch = matches[_matchId]; // \\u83b7\\u53d6\\u5b58\\u50a8\\u6307\\u9488\\n        newMatch.matchId = _matchId;\\n\\n        newMatch.playerA.playerAddress = _playerA;\\n        newMatch.playerA.score = 0;\\n        newMatch.playerA.consecutiveWrongAnswers = 0;\\n        newMatch.playerA.isActive = true;\\n\\n        newMatch.playerB.playerAddress = _playerB;\\n        newMatch.playerB.score = 0;\\n        newMatch.playerB.consecutiveWrongAnswers = 0;\\n        newMatch.playerB.isActive = true;\\n\\n        newMatch.currentQuestionIndex = 0; // \\u4ece\\u7b2c0\\u9898\\u5f00\\u59cb (\\u4ee3\\u8868\\u7b2c\\u4e00\\u9898)\\n        newMatch.currentPlayerTurn = _playerA; // V1\\u7248\\u672c\\uff0c\\u9ed8\\u8ba4\\u9009\\u624bA\\u5148\\u624b\\n        newMatch.currentQuestionDeadline = block.timestamp + ANSWER_TIMEOUT_DURATION; // \\u8bbe\\u7f6e\\u7b2c\\u4e00\\u9898\\u7684\\u56de\\u7b54\\u622a\\u6b62\\u65f6\\u95f4\\n\\n        newMatch.status = MatchStatus.InProgress; // \\u5c06\\u6bd4\\u8d5b\\u72b6\\u6001\\u8bbe\\u7f6e\\u4e3a\\u8fdb\\u884c\\u4e2d\\n        newMatch.winner = address(0); // \\u521d\\u59cb\\u5316\\u80dc\\u5229\\u8005\\u4e3a\\u7a7a\\u5730\\u5740\\n\\n        // \\u5173\\u4e8e\\u901a\\u77e5 AudienceManager \\u5408\\u7ea6\\u5f53\\u524d\\u6d3b\\u8dc3\\u9009\\u624b\\uff1a\\n        // \\u5982\\u524d\\u6240\\u8ff0\\uff0cV1\\u7b80\\u5316\\u7248\\u4e2d\\uff0c\\u6b64\\u64cd\\u4f5c\\u5c06\\u7531\\u7ba1\\u7406\\u5458\\u5728\\u8c03\\u7528 startMatch \\u540e\\uff0c\\n        // \\u518d\\u53e6\\u884c\\u8c03\\u7528 AudienceManager \\u5408\\u7ea6\\u7684 setActiveFighters \\u51fd\\u6570\\u6765\\u5b8c\\u6210\\u3002\\n        // \\u82e5\\u8981\\u5728\\u6b64\\u5408\\u7ea6\\u5185\\u76f4\\u63a5\\u8c03\\u7528\\uff0c\\u9700\\u8981 AudienceManager \\u63d0\\u4f9b\\u76f8\\u5e94\\u6743\\u9650\\u6216\\u63a5\\u53e3\\u3002\\n        // \\u4f8b\\u5982:\\n        // IAudienceManager(audienceManagerContractAddress).setActiveFighters(_matchId, _playerA, _playerB);\\n        // \\u4f46\\u8fd9\\u8981\\u6c42 AudienceManager \\u7684 setActiveFighters \\u5141\\u8bb8\\u672c\\u5408\\u7ea6\\u8c03\\u7528\\u3002\\n\\n        // \\u89e6\\u53d1\\u6bd4\\u8d5b\\u5f00\\u59cb\\u4e8b\\u4ef6\\n        emit MatchStarted(\\n            _matchId,\\n            _playerA,\\n            _playerB,\\n            newMatch.currentPlayerTurn, // \\u660e\\u786e\\u8c01\\u5148\\u624b\\n            block.timestamp, // \\u6bd4\\u8d5b\\u6b63\\u5f0f\\u5f00\\u59cb\\u7684\\u65f6\\u95f4\\u6233\\n            newMatch.currentQuestionDeadline\\n        );\\n    }\\n\\n    // --- \\u5185\\u90e8\\u51fd\\u6570 ---\\n/**\\n * @dev \\u5185\\u90e8\\u51fd\\u6570\\uff0c\\u7528\\u4e8e\\u7ed3\\u675f\\u6bd4\\u8d5b\\uff0c\\u5224\\u5b9a\\u80dc\\u8005\\uff0c\\u5e76\\u8bb0\\u5f55\\u5230\\u4e0d\\u673d\\u94fe\\u3002\\n * @param _matchId \\u8981\\u7ed3\\u675f\\u7684\\u6bd4\\u8d5bID\\u3002\\n */\\nfunction _concludeMatch(uint256 _matchId) internal {\\n    Match storage concludedMatch = matches[_matchId];\\n\\n    // \\u9632\\u6b62\\u91cd\\u590d\\u7ed3\\u675f\\n    require(concludedMatch.status != MatchStatus.Concluded, \\\"MatchContract: Match already concluded\\\");\\n\\n    address winningPlayer;\\n    if (concludedMatch.playerA.score > concludedMatch.playerB.score) {\\n        winningPlayer = concludedMatch.playerA.playerAddress;\\n    } else if (concludedMatch.playerB.score > concludedMatch.playerA.score) {\\n        winningPlayer = concludedMatch.playerB.playerAddress;\\n    } else {\\n        winningPlayer = address(0); // \\u5e73\\u5c40\\n    }\\n\\n    concludedMatch.winner = winningPlayer;\\n    concludedMatch.status = MatchStatus.Concluded;\\n\\n    emit MatchConcluded(\\n        _matchId,\\n        winningPlayer,\\n        concludedMatch.playerA.score,\\n        concludedMatch.playerB.score\\n    );\\n\\n    // \\u8c03\\u7528\\u4e0d\\u673d\\u94fe\\u5408\\u7ea6\\u8bb0\\u5f55\\u7ed3\\u679c\\n    // \\u5047\\u8bbe ImmortalBlock.sol \\u6709\\u4e00\\u4e2a\\u51fd\\u6570 forgeBlock(uint256 matchId, address winner, uint256 scoreA, uint256 scoreB)\\n    // \\u5e76\\u4e14\\u672c\\u5408\\u7ea6\\u5730\\u5740\\u88ab\\u6388\\u6743\\u8c03\\u7528\\u5b83\\uff08\\u4f8b\\u5982 ImmortalBlock \\u4e5f Ownable\\uff0c\\u4e14 owner \\u662f\\u540c\\u4e00\\u4e2a\\u4eba\\uff0c\\u6216\\u8005 ImmortalBlock \\u6709\\u6388\\u6743\\u673a\\u5236\\uff09\\n    // \\u4e3a\\u4e86V1\\u7b80\\u5316\\uff0c\\u6211\\u4eec\\u5047\\u8bbe ImmortalBlock \\u7684 forgeBlock \\u53ef\\u4ee5\\u88ab\\u4efb\\u4f55\\u4eba\\u8c03\\u7528\\uff0c\\u6216\\u8005\\u662f\\u7531\\u672c\\u5408\\u7ea6 Owner \\u540e\\u671f\\u624b\\u52a8\\u6574\\u7406\\u6570\\u636e\\u8c03\\u7528\\u3002\\n    // \\u5982\\u679c\\u8981\\u76f4\\u63a5\\u8c03\\u7528\\uff0c\\u9700\\u8981\\u5b9a\\u4e49\\u63a5\\u53e3 IImmortalBlock\\n    // IImmortalBlock(immortalBlockContractAddress).forgeBlock(_matchId, winningPlayer, ...);\\n    // \\u4e3a\\u7b80\\u5355\\u8d77\\u89c1\\uff0cV1\\u7248\\u672c\\u4e2d\\uff0cMatchContract\\u4ec5\\u53d1\\u51fa\\u4e8b\\u4ef6\\uff0c\\u5b9e\\u9645\\u5199\\u5165ImmortalBlock\\u53ef\\u7531\\u7ba1\\u7406\\u5458\\u6839\\u636e\\u4e8b\\u4ef6\\u94fe\\u4e0b\\u89e6\\u53d1\\uff0c\\n    // \\u6216\\u8005\\u6211\\u4eec\\u5047\\u8bbe\\u6709\\u4e00\\u4e2a\\u7b80\\u5355\\u7684 forgeBlock \\u63a5\\u53e3\\u3002\\n    // \\u6211\\u4eec\\u5148\\u4e13\\u6ce8\\u4e8e MatchContract \\u7684\\u903b\\u8f91\\u3002\\u4e0e ImmortalBlock \\u7684\\u4ea4\\u4e92\\u53ef\\u4ee5\\u540e\\u7eed\\u7ec6\\u5316\\u3002\\n    // \\u4f8b\\u5982\\uff0c\\u53ef\\u4ee5\\u7b80\\u5355\\u5730\\u5c1d\\u8bd5\\u8c03\\u7528\\uff0c\\u5982\\u679c\\u5931\\u8d25\\uff0c\\u4e8b\\u4ef6\\u4ecd\\u7136\\u53d1\\u51fa\\uff0c\\u6570\\u636e\\u4ecd\\u5728 MatchContract \\u4e2d\\u3002\\n\\n    // \\u793a\\u4f8b\\uff1a\\u5c1d\\u8bd5\\u8c03\\u7528\\u4e00\\u4e2a\\u7b80\\u5316\\u7684 ImmortalBlock \\u51fd\\u6570\\n    // function recordVictory(uint256 _mId, address _winAddr) external;\\n    // (bool success, ) = immortalBlockContractAddress.call(\\n    //     abi.encodeWithSignature(\\\"recordVictory(uint256,address)\\\", _matchId, winningPlayer)\\n    // );\\n    // if (!success) {\\n    //     // \\u53ef\\u9009\\uff1a\\u53d1\\u51fa\\u4e00\\u4e2a\\u8c03\\u7528\\u5931\\u8d25\\u7684\\u4e8b\\u4ef6\\u6216\\u65e5\\u5fd7\\n    //     console.log(\\\"Failed to record victory on ImmortalBlock for match %s\\\", _matchId);\\n    // }\\n}\\n\\n/**\\n     * @dev \\u7531\\u88c1\\u5224\\u8c03\\u7528\\uff0c\\u63d0\\u4ea4\\u9009\\u624b\\u5bf9\\u5f53\\u524d\\u95ee\\u9898\\u7684\\u56de\\u7b54\\u7ed3\\u679c\\u3002\\n     * \\u5373\\u4f7f\\u9009\\u624b\\u8fdb\\u5165\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\uff0c\\u6bd4\\u8d5b\\u4e5f\\u4f1a\\u7ee7\\u7eed\\u8fdb\\u884c\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _playerWhoAnswered \\u56de\\u7b54\\u95ee\\u9898\\u7684\\u9009\\u624b\\u5730\\u5740\\u3002\\n     * @param _questionIndex \\u56de\\u7b54\\u7684\\u95ee\\u9898\\u7d22\\u5f15\\u3002\\n     * @param _isCorrect \\u56de\\u7b54\\u662f\\u5426\\u6b63\\u786e\\u3002\\n     */\\n    function submitAnswerResult(\\n        uint256 _matchId,\\n        address _playerWhoAnswered,\\n        uint256 _questionIndex,\\n        bool _isCorrect\\n    ) external onlyReferee { // \\u53ea\\u6709\\u88c1\\u5224\\u53ef\\u4ee5\\u8c03\\u7528\\n        Match storage currentMatch = matches[_matchId];\\n\\n        // --- \\u9a8c\\u8bc1\\u9636\\u6bb5 ---\\n        require(currentMatch.matchId == _matchId, \\\"MatchContract: Match not initialized or ID mismatch.\\\");\\n        // \\u6bd4\\u8d5b\\u72b6\\u6001\\u53ef\\u4ee5\\u662f InProgress, PlayerAReplaceable, \\u6216 PlayerBReplaceable\\uff0c\\u90fd\\u5141\\u8bb8\\u63d0\\u4ea4\\u7b54\\u6848\\n        require(\\n            currentMatch.status == MatchStatus.InProgress ||\\n            currentMatch.status == MatchStatus.PlayerAReplaceable ||\\n            currentMatch.status == MatchStatus.PlayerBReplaceable,\\n            \\\"MatchContract: Match is not in a playable state.\\\" // \\u82f1\\u6587\\u63d0\\u793a\\uff1a\\u6bd4\\u8d5b\\u672a\\u5904\\u4e8e\\u53ef\\u8fdb\\u884c\\u72b6\\u6001\\n        );\\n        require(_questionIndex == currentMatch.currentQuestionIndex, \\\"MatchContract: Submitted result is for an outdated or future question index.\\\");\\n        require(_playerWhoAnswered == currentMatch.currentPlayerTurn, \\\"MatchContract: It's not this player's turn to answer.\\\");\\n\\n        // --- \\u83b7\\u53d6\\u9009\\u624b\\u72b6\\u6001\\u5b58\\u50a8\\u6307\\u9488 ---\\n        PlayerMatchState storage answeringPlayerState;\\n        PlayerMatchState storage opponentPlayerState;\\n\\n        if (_playerWhoAnswered == currentMatch.playerA.playerAddress) {\\n            answeringPlayerState = currentMatch.playerA;\\n            opponentPlayerState = currentMatch.playerB;\\n        } else if (_playerWhoAnswered == currentMatch.playerB.playerAddress) {\\n            answeringPlayerState = currentMatch.playerB;\\n            opponentPlayerState = currentMatch.playerA;\\n        } else {\\n            revert(\\\"MatchContract: Player who answered is not part of this match.\\\");\\n        }\\n\\n        // --- \\u66f4\\u65b0\\u9009\\u624b\\u7b54\\u9898\\u72b6\\u6001 ---\\n        if (_isCorrect) {\\n            answeringPlayerState.score++;\\n            answeringPlayerState.consecutiveWrongAnswers = 0;\\n            // \\u5982\\u679c\\u9009\\u624b\\u4e4b\\u524d\\u5904\\u4e8e\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\uff0c\\u4f46\\u73b0\\u5728\\u7b54\\u5bf9\\u4e86\\uff0c\\u53ef\\u4ee5\\u5c06\\u6bd4\\u8d5b\\u72b6\\u6001\\u6062\\u590d\\u4e3a InProgress\\n            // \\uff08\\u524d\\u63d0\\u662f\\u5bf9\\u624b\\u4e5f\\u4e0d\\u662f\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\uff09\\n            if (currentMatch.status == MatchStatus.PlayerAReplaceable && _playerWhoAnswered == currentMatch.playerA.playerAddress ||\\n                currentMatch.status == MatchStatus.PlayerBReplaceable && _playerWhoAnswered == currentMatch.playerB.playerAddress) {\\n                 // \\u68c0\\u67e5\\u5bf9\\u624b\\u72b6\\u6001\\uff0c\\u53ea\\u6709\\u5f53\\u5bf9\\u624b\\u4e5f\\u4e0d\\u662fReplaceable\\u65f6\\u624d\\u6062\\u590d\\u4e3aInProgress\\n                bool opponentIsReplaceable = (_playerWhoAnswered == currentMatch.playerA.playerAddress && currentMatch.status == MatchStatus.PlayerBReplaceable) ||\\n                                             (_playerWhoAnswered == currentMatch.playerB.playerAddress && currentMatch.status == MatchStatus.PlayerAReplaceable);\\n                if (!opponentIsReplaceable) {\\n                    currentMatch.status = MatchStatus.InProgress;\\n                }\\n            }\\n\\n        } else { // \\u56de\\u7b54\\u9519\\u8bef\\n            answeringPlayerState.consecutiveWrongAnswers++;\\n            if (answeringPlayerState.consecutiveWrongAnswers >= MAX_CONSECUTIVE_WRONG_ANSWERS_FOR_REPLACEMENT) {\\n                // \\u5373\\u4f7f\\u72b6\\u6001\\u5df2\\u7ecf\\u662f PlayerAReplaceable/PlayerBReplaceable\\uff0c\\u518d\\u6b21\\u89e6\\u53d1\\u4e8b\\u4ef6\\u4e5f\\u65e0\\u59a8\\uff0c\\u8868\\u660e\\u53c8\\u9519\\u4e86\\u4e00\\u6b21\\n                if (_playerWhoAnswered == currentMatch.playerA.playerAddress) {\\n                    currentMatch.status = MatchStatus.PlayerAReplaceable;\\n                } else {\\n                    currentMatch.status = MatchStatus.PlayerBReplaceable;\\n                }\\n                emit PlayerBecameReplaceable(_matchId, _playerWhoAnswered, answeringPlayerState.consecutiveWrongAnswers);\\n            }\\n        }\\n\\n        // --- \\u89e6\\u53d1\\u7b54\\u6848\\u63d0\\u4ea4\\u4e8b\\u4ef6 ---\\n        uint256 scoreA_afterUpdate = currentMatch.playerA.score;\\n        uint256 scoreB_afterUpdate = currentMatch.playerB.score;\\n\\n        emit AnswerResultSubmitted(\\n            _matchId,\\n            _questionIndex,\\n            _playerWhoAnswered,\\n            _isCorrect,\\n            scoreA_afterUpdate,\\n            scoreB_afterUpdate\\n        );\\n\\n        // --- \\u63a8\\u8fdb\\u6bd4\\u8d5b\\u72b6\\u6001\\u5230\\u4e0b\\u4e00\\u9898/\\u4e0b\\u4e00\\u4f4d\\u9009\\u624b (\\u4e0d\\u518d\\u6709\\u63d0\\u524d return \\u7684\\u6682\\u505c\\u903b\\u8f91) ---\\n        currentMatch.currentQuestionIndex++;\\n\\n        if (currentMatch.currentQuestionIndex >= TOTAL_QUESTIONS) {\\n            _concludeMatch(_matchId); // \\u8c03\\u7528\\u5185\\u90e8\\u51fd\\u6570\\u7ed3\\u675f\\u6bd4\\u8d5b\\n            return; // \\u6bd4\\u8d5b\\u7ed3\\u675f\\n        }\\n\\n        // \\u5207\\u6362\\u5230\\u53e6\\u4e00\\u4f4d\\u9009\\u624b\\u7b54\\u9898\\n        if (currentMatch.currentPlayerTurn == currentMatch.playerA.playerAddress) {\\n            currentMatch.currentPlayerTurn = currentMatch.playerB.playerAddress;\\n        } else {\\n            currentMatch.currentPlayerTurn = currentMatch.playerA.playerAddress;\\n        }\\n\\n        // \\u4e3a\\u65b0\\u9898\\u76ee\\u548c\\u65b0\\u9009\\u624b\\u8bbe\\u7f6e\\u56de\\u7b54\\u622a\\u6b62\\u65f6\\u95f4\\n        currentMatch.currentQuestionDeadline = block.timestamp + ANSWER_TIMEOUT_DURATION;\\n\\n        emit PlayerTurnAdvanced(\\n            _matchId,\\n            currentMatch.currentQuestionIndex,\\n            currentMatch.currentPlayerTurn,\\n            currentMatch.currentQuestionDeadline\\n        );\\n    }\\n    /**\\n     * @dev \\u7531\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff0c\\u7528\\u4e00\\u540d\\u65b0\\u9009\\u624b\\u66ff\\u6362\\u573a\\u4e0a\\u5f53\\u524d\\u5904\\u4e8e\\u53ef\\u66ff\\u6362\\u72b6\\u6001\\u7684\\u9009\\u624b\\u3002\\n     * \\u65b0\\u9009\\u624b\\u5c06\\u7ee7\\u627f\\u88ab\\u66ff\\u6362\\u9009\\u624b\\u7684\\u5f97\\u5206\\uff0c\\u4f46\\u8fde\\u7eed\\u7b54\\u9519\\u6b21\\u6570\\u91cd\\u7f6e\\u4e3a0\\u3002\\n     * \\u6bd4\\u8d5b\\u72b6\\u6001\\u5c06\\u6062\\u590d\\u4e3a InProgress\\u3002\\n     * @param _matchId \\u6bd4\\u8d5bID\\u3002\\n     * @param _playerToReplace \\u5c06\\u88ab\\u66ff\\u6362\\u7684\\u573a\\u4e0a\\u9009\\u624b\\u7684\\u5730\\u5740\\u3002\\n     * @param _newPlayer \\u5c06\\u4e0a\\u573a\\u66ff\\u6362\\u7684\\u65b0\\u9009\\u624b\\u7684\\u5730\\u5740\\uff08\\u539f\\u89c2\\u4f17\\uff09\\u3002\\n     */\\n    function replacePlayer(\\n        uint256 _matchId,\\n        address _playerToReplace,\\n        address _newPlayer\\n    ) external onlyOwner { // \\u53ea\\u6709\\u5408\\u7ea6\\u62e5\\u6709\\u8005\\uff08\\u7ba1\\u7406\\u5458\\uff09\\u53ef\\u4ee5\\u6267\\u884c\\u6b64\\u64cd\\u4f5c\\n        Match storage currentMatch = matches[_matchId];\\n\\n        // --- \\u9a8c\\u8bc1\\u9636\\u6bb5 ---\\n        require(currentMatch.matchId == _matchId, \\\"MatchContract: Match not initialized or ID mismatch.\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n        require(\\n            currentMatch.status == MatchStatus.PlayerAReplaceable || currentMatch.status == MatchStatus.PlayerBReplaceable,\\n            \\\"MatchContract: Match is not in a state where a player can be replaced.\\\" // \\u82f1\\u6587\\u63d0\\u793a\\n        );\\n        require(_playerToReplace != address(0) && _newPlayer != address(0), \\\"MatchContract: Player addresses cannot be zero.\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n        require(_playerToReplace != _newPlayer, \\\"MatchContract: New player cannot be the same as the one being replaced.\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n\\n        PlayerMatchState storage playerStateToUpdate;\\n        address opponentAddress;\\n\\n        // \\u786e\\u8ba4 _playerToReplace \\u662f\\u54ea\\u4f4d\\u9009\\u624b\\uff0c\\u5e76\\u83b7\\u53d6\\u5176\\u72b6\\u6001\\u5b58\\u50a8\\u6307\\u9488\\n        if (currentMatch.status == MatchStatus.PlayerAReplaceable) {\\n            require(_playerToReplace == currentMatch.playerA.playerAddress, \\\"MatchContract: Player to replace does not match replaceable status (expected Player A).\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n            playerStateToUpdate = currentMatch.playerA;\\n            opponentAddress = currentMatch.playerB.playerAddress;\\n        } else { // currentMatch.status == MatchStatus.PlayerBReplaceable\\n            require(_playerToReplace == currentMatch.playerB.playerAddress, \\\"MatchContract: Player to replace does not match replaceable status (expected Player B).\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n            playerStateToUpdate = currentMatch.playerB;\\n            opponentAddress = currentMatch.playerA.playerAddress;\\n        }\\n        \\n        // \\u786e\\u4fdd\\u65b0\\u9009\\u624b\\u4e0d\\u662f\\u573a\\u4e0a\\u7684\\u53e6\\u4e00\\u4f4d\\u5bf9\\u624b\\n        require(_newPlayer != opponentAddress, \\\"MatchContract: New player is already the opponent.\\\"); // \\u82f1\\u6587\\u63d0\\u793a\\n\\n        // --- \\u6267\\u884c\\u66ff\\u6362 ---\\n\\n        // 1. \\u6807\\u8bb0\\u65e7\\u9009\\u624b\\u4e0d\\u518d\\u6d3b\\u8dc3\\n        playerStateToUpdate.isActive = false; \\n        // \\u65e7\\u9009\\u624b\\u7684\\u5f97\\u5206\\u548c\\u6700\\u7ec8\\u7684\\u8fde\\u7eed\\u7b54\\u9519\\u6b21\\u6570\\u4fdd\\u7559\\u5728 playerStateToUpdate \\u4e2d\\uff0c\\u4f5c\\u4e3a\\u5386\\u53f2\\u8bb0\\u5f55\\u3002\\n        // \\u4f46\\u7531\\u4e8e playerStateToUpdate \\u662f\\u4e00\\u4e2a storage pointer\\uff0c\\u63a5\\u4e0b\\u6765\\u6211\\u4eec\\u4f1a\\u8986\\u76d6\\u5b83\\u7684\\u5185\\u5bb9\\u3002\\n        // \\u5982\\u679c\\u9700\\u8981\\u4fdd\\u7559\\u65e7\\u9009\\u624b\\u7684\\u5b8c\\u6574\\u6700\\u7ec8\\u72b6\\u6001\\uff0c\\u9700\\u8981\\u5148\\u590d\\u5236\\u4e00\\u4efd\\u6216\\u6709\\u5355\\u72ec\\u7684\\u5b58\\u50a8\\u3002\\n        // V1\\u7b80\\u5316\\uff1a\\u76f4\\u63a5\\u66f4\\u65b0\\u6b64\\u69fd\\u4f4d\\u4e3a\\u65b0\\u9009\\u624b\\u3002\\n\\n        // 2. \\u66f4\\u65b0\\u69fd\\u4f4d\\u4e3a\\u65b0\\u9009\\u624b\\u7684\\u4fe1\\u606f\\n        // \\uff08\\u65b0\\u9009\\u624b\\u7ee7\\u627f\\u5f97\\u5206\\uff0c\\u8fde\\u7eed\\u7b54\\u9519\\u6e05\\u96f6\\uff09\\n        if (_playerToReplace == currentMatch.playerA.playerAddress) {\\n            currentMatch.playerA = PlayerMatchState({\\n                playerAddress: _newPlayer,\\n                score: playerStateToUpdate.score, // \\u7ee7\\u627f\\u5f97\\u5206\\n                consecutiveWrongAnswers: 0,       // \\u91cd\\u7f6e\\u8fde\\u7eed\\u7b54\\u9519\\n                isActive: true\\n            });\\n        } else {\\n            currentMatch.playerB = PlayerMatchState({\\n                playerAddress: _newPlayer,\\n                score: playerStateToUpdate.score, // \\u7ee7\\u627f\\u5f97\\u5206\\n                consecutiveWrongAnswers: 0,       // \\u91cd\\u7f6e\\u8fde\\u7eed\\u7b54\\u9519\\n                isActive: true\\n            });\\n        }\\n\\n        // 3. \\u66f4\\u65b0\\u6bd4\\u8d5b\\u72b6\\u6001\\n        currentMatch.status = MatchStatus.InProgress;\\n\\n        // 4. \\u5904\\u7406\\u5f53\\u524d\\u56de\\u5408\\u548c\\u622a\\u6b62\\u65f6\\u95f4\\n        // \\u65b0\\u9009\\u624b\\u4e0a\\u573a\\uff0c\\u5f53\\u524d\\u9898\\u76ee\\u7ee7\\u7eed\\uff0c\\u4f46\\u91cd\\u7f6e\\u56de\\u7b54\\u622a\\u6b62\\u65f6\\u95f4\\u3002\\n        // \\u56de\\u5408\\u5f52\\u5c5e\\uff1a\\u5982\\u679c\\u88ab\\u66ff\\u6362\\u7684\\u662f\\u5f53\\u524d\\u7b54\\u9898\\u8005\\uff0c\\u5219\\u65b0\\u9009\\u624b\\u63a5\\u66ff\\u56de\\u5408\\uff1b\\u5426\\u5219\\u56de\\u5408\\u4e0d\\u53d8\\u3002\\n        if (currentMatch.currentPlayerTurn == _playerToReplace) {\\n            currentMatch.currentPlayerTurn = _newPlayer;\\n        }\\n        // \\u65e0\\u8bba\\u8c01\\u7684\\u56de\\u5408\\uff0c\\u90fd\\u91cd\\u7f6e\\u5f53\\u524d\\u95ee\\u9898\\u7684\\u622a\\u6b62\\u65f6\\u95f4\\uff0c\\u7ed9\\u65b0\\u5c40\\u9762\\u4e00\\u4e9b\\u51c6\\u5907\\n        currentMatch.currentQuestionDeadline = block.timestamp + ANSWER_TIMEOUT_DURATION;\\n\\n        // \\u89e6\\u53d1\\u9009\\u624b\\u88ab\\u66ff\\u6362\\u4e8b\\u4ef6\\n        emit PlayerReplaced(_matchId, _playerToReplace, _newPlayer);\\n\\n        // \\u89e6\\u53d1\\u56de\\u5408\\u4fe1\\u606f\\u66f4\\u65b0\\u4e8b\\u4ef6 (\\u56e0\\u4e3a\\u622a\\u6b62\\u65f6\\u95f4\\u5df2\\u53d8\\uff0c\\u5f53\\u524d\\u7b54\\u9898\\u4eba\\u4e5f\\u53ef\\u80fd\\u5df2\\u53d8)\\n        emit PlayerTurnAdvanced(\\n            _matchId,\\n            currentMatch.currentQuestionIndex, // \\u9898\\u76ee\\u7d22\\u5f15\\u4e0d\\u53d8\\n            currentMatch.currentPlayerTurn,\\n            currentMatch.currentQuestionDeadline\\n        );\\n    }\\n}\\n\",\"keccak256\":\"0x045491546f7d8bdc2b00c4a5fd294bc18729b00358309f48494d06bd0eccacab\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040523480156200001157600080fd5b5060405162001cfc38038062001cfc833981016040819052620000349162000285565b836001600160a01b0381166200006557604051631e4fbdf760e01b8152600060048201526024015b60405180910390fd5b620000708162000218565b506001600160a01b038316620000ef5760405162461bcd60e51b815260206004820152603660248201527f4d61746368436f6e74726163743a20496e76616c696420696d6d6f7274616c2060448201527f626c6f636b20636f6e747261637420616464726573730000000000000000000060648201526084016200005c565b6001600160a01b0382166200016d5760405162461bcd60e51b815260206004820152603860248201527f4d61746368436f6e74726163743a20496e76616c69642061756469656e63652060448201527f6d616e6167657220636f6e74726163742061646472657373000000000000000060648201526084016200005c565b6001600160a01b038116620001d45760405162461bcd60e51b815260206004820152602660248201527f4d61746368436f6e74726163743a20496e76616c69642072656665726565206160448201526564647265737360d01b60648201526084016200005c565b600180546001600160a01b039485166001600160a01b03199182161790915560028054938516938216939093179092556003805491909316911617905550620002e2565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80516001600160a01b03811681146200028057600080fd5b919050565b600080600080608085870312156200029c57600080fd5b620002a78562000268565b9350620002b76020860162000268565b9250620002c76040860162000268565b9150620002d76060860162000268565b905092959194509250565b611a0a80620002f26000396000f3fe608060405234801561001057600080fd5b50600436106101005760003560e01c80638da5cb5b11610097578063be50d65b11610066578063be50d65b146102d4578063e867344c146102e7578063f2fde38b146102fa578063f7ef9f4f1461030d57600080fd5b80638da5cb5b14610287578063900cc19e146102985780639158f979146102ab578063a027bf24146102c157600080fd5b806347b7cf34116100d357806347b7cf341461023f5780634de7a65d14610259578063715018a61461026c5780637552aefd1461027457600080fd5b806316c1e3561461010557806319d448df14610135578063382eee021461014a5780634768d4ef1461015d575b600080fd5b600354610118906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61014861014336600461176b565b610315565b005b61014861015836600461176b565b6103a9565b61022b61016b36600461178d565b600460208181526000928352604092839020805484516080808201875260018401546001600160a01b039081168352600285015483870152600385015460ff808216858b015261010091829004811615156060808701919091528a519485018b52988701548316845260058701549784019790975260068601548088169984019990995297889004861615159682019690965260078401546008850154600990950154939792969195818116959184900483169491939082169291041688565b60405161012c9897969594939291906117bc565b610247600a81565b60405160ff909116815260200161012c565b610148610267366004611890565b61044f565b610148610a6b565b600254610118906001600160a01b031681565b6000546001600160a01b0316610118565b600154610118906001600160a01b031681565b6102b3603c81565b60405190815260200161012c565b6101486102cf3660046118cc565b610a7f565b6101486102e236600461176b565b611161565b6101486102f5366004611890565b611200565b61014861030836600461176b565b611545565b610247600381565b61031d611583565b6001600160a01b0381166103875760405162461bcd60e51b815260206004820152602660248201527f4d61746368436f6e74726163743a20496e76616c69642072656665726565206160448201526564647265737360d01b60648201526084015b60405180910390fd5b600380546001600160a01b0319166001600160a01b0392909216919091179055565b6103b1611583565b6001600160a01b03811661042d5760405162461bcd60e51b815260206004820152603860248201527f4d61746368436f6e74726163743a20496e76616c69642061756469656e63652060448201527f6d616e6167657220636f6e747261637420616464726573730000000000000000606482015260840161037e565b600280546001600160a01b0319166001600160a01b0392909216919091179055565b610457611583565b6000838152600460205260409020805484146104855760405162461bcd60e51b815260040161037e90611919565b6003600982015460ff1660058111156104a0576104a06117a6565b14806104c457506004600982015460ff1660058111156104c2576104c26117a6565b145b6105455760405162461bcd60e51b815260206004820152604660248201527f4d61746368436f6e74726163743a204d61746368206973206e6f7420696e206160448201527f207374617465207768657265206120706c617965722063616e206265207265706064820152653630b1b2b21760d11b608482015260a40161037e565b6001600160a01b0383161580159061056557506001600160a01b03821615155b6105c95760405162461bcd60e51b815260206004820152602f60248201527f4d61746368436f6e74726163743a20506c61796572206164647265737365732060448201526e31b0b73737ba103132903d32b9379760891b606482015260840161037e565b816001600160a01b0316836001600160a01b0316036106605760405162461bcd60e51b815260206004820152604760248201527f4d61746368436f6e74726163743a204e657720706c617965722063616e6e6f7460448201527f206265207468652073616d6520617320746865206f6e65206265696e67207265606482015266383630b1b2b21760c91b608482015260a40161037e565b6000806003600984015460ff16600581111561067e5761067e6117a6565b036107485760018301546001600160a01b0386811691161461072e5760405162461bcd60e51b815260206004820152605760248201527f4d61746368436f6e74726163743a20506c6179657220746f207265706c61636560448201527f20646f6573206e6f74206d61746368207265706c61636561626c65207374617460648201527f75732028657870656374656420506c617965722041292e000000000000000000608482015260a40161037e565b5050600481015460018201906001600160a01b0316610809565b60048301546001600160a01b038681169116146107f35760405162461bcd60e51b815260206004820152605760248201527f4d61746368436f6e74726163743a20506c6179657220746f207265706c61636560448201527f20646f6573206e6f74206d61746368207265706c61636561626c65207374617460648201527f75732028657870656374656420506c617965722042292e000000000000000000608482015260a40161037e565b5050600181015460048201906001600160a01b03165b806001600160a01b0316846001600160a01b0316036108855760405162461bcd60e51b815260206004820152603260248201527f4d61746368436f6e74726163743a204e657720706c6179657220697320616c7260448201527132b0b23c903a34329037b83837b732b73a1760711b606482015260840161037e565b60028201805461ff001916905560018301546001600160a01b039081169086160361090e57604080516080810182526001600160a01b03861680825260018086015460208401819052600094840194909452606090920182905290850180546001600160a01b0319169091179055600284015560038301805461ffff1916610100179055610970565b604080516080810182526001600160a01b038616808252600180860154602084018190526000948401949094526060909201919091526004850180546001600160a01b0319169091179055600584015560068301805461ffff19166101001790555b60098301805460ff1916600217905560078301546001600160a01b0386811661010090920416036109be57600783018054610100600160a81b0319166101006001600160a01b038716021790555b6109c9603c42611983565b60088401556040516001600160a01b03808616919087169088907fdad1dbb9a78bbc7279b8af6b35551eece4af2803c7d6a58bc4ab785b6ba9e11d90600090a4600783015460088401546040805160ff841681526101009093046001600160a01b0316602084015282015286907fa59e669b9093ccc4685ff4947c2078b7953c77c29fac76c44bc195ee0e0b39169060600160405180910390a2505050505050565b610a73611583565b610a7d60006115b0565b565b6003546001600160a01b03163314610af55760405162461bcd60e51b815260206004820152603360248201527f4d61746368436f6e74726163743a2043616c6c6572206973206e6f742074686560448201527220617574686f72697a6564207265666572656560681b606482015260840161037e565b600084815260046020526040902080548514610b235760405162461bcd60e51b815260040161037e90611919565b6002600982015460ff166005811115610b3e57610b3e6117a6565b1480610b6257506003600982015460ff166005811115610b6057610b606117a6565b145b80610b8557506004600982015460ff166005811115610b8357610b836117a6565b145b610bea5760405162461bcd60e51b815260206004820152603060248201527f4d61746368436f6e74726163743a204d61746368206973206e6f7420696e206160448201526f10383630bcb0b136329039ba30ba329760811b606482015260840161037e565b600781015460ff168314610c7b5760405162461bcd60e51b815260206004820152604c60248201527f4d61746368436f6e74726163743a205375626d697474656420726573756c742060448201527f697320666f7220616e206f75746461746564206f72206675747572652071756560648201526b39ba34b7b71034b73232bc1760a11b608482015260a40161037e565b60078101546001600160a01b038581166101009092041614610cfd5760405162461bcd60e51b815260206004820152603560248201527f4d61746368436f6e74726163743a2049742773206e6f74207468697320706c616044820152743cb2b913b9903a3ab937103a379030b739bbb2b91760591b606482015260840161037e565b600181015460009081906001600160a01b0390811690871603610d295750506001810160048201610dbe565b60048301546001600160a01b0390811690871603610d505750506004810160018201610dbe565b60405162461bcd60e51b815260206004820152603d60248201527f4d61746368436f6e74726163743a20506c617965722077686f20616e7377657260448201527f6564206973206e6f742070617274206f662074686973206d617463682e000000606482015260840161037e565b8315610ef557600182018054906000610dd68361199c565b909155505060028201805460ff191690556003600984015460ff166005811115610e0257610e026117a6565b148015610e1e575060018301546001600160a01b038781169116145b80610e5b57506004600984015460ff166005811115610e3f57610e3f6117a6565b148015610e5b575060048301546001600160a01b038781169116145b15610ef05760018301546000906001600160a01b038881169116148015610e9a57506004600985015460ff166005811115610e9857610e986117a6565b145b80610ed7575060048401546001600160a01b038881169116148015610ed757506003600985015460ff166005811115610ed557610ed56117a6565b145b905080610eee5760098401805460ff191660021790555b505b610fba565b60028201805460ff16906000610f0a836119b5565b82546101009290920a60ff818102199093169183160217909155600284015460039116109050610fba5760018301546001600160a01b0390811690871603610f605760098301805460ff19166003179055610f70565b60098301805460ff191660041790555b600282015460405160ff90911681526001600160a01b0387169088907f049048c07309020597ef2e5a5fae448927abaa6c58f51d707ab4a44bb4046b119060200160405180910390a35b60028301546005840154604080518715158152602081018490529081018290526001600160a01b0389169088908b907f409ee49d147354f7e1c81ec76ba3786269472b638ea50f010975cf5c579f5d379060600160405180910390a460078501805460ff1690600061102b836119b5565b82546101009290920a60ff8181021990931691831602179091556007870154600a91161090506110685761105e89611600565b505050505061115b565b600185015460078601546001600160a01b03918216610100909104909116036110bd5760048501546007860180546001600160a01b0390921661010002610100600160a81b03199092169190911790556110eb565b60018501546007860180546001600160a01b0390921661010002610100600160a81b03199092169190911790555b6110f6603c42611983565b6008860181905560078601546040805160ff831681526101009092046001600160a01b0316602083015281019190915289907fa59e669b9093ccc4685ff4947c2078b7953c77c29fac76c44bc195ee0e0b39169060600160405180910390a250505050505b50505050565b611169611583565b6001600160a01b0381166111de5760405162461bcd60e51b815260206004820152603660248201527f4d61746368436f6e74726163743a20496e76616c696420696d6d6f7274616c20604482015275626c6f636b20636f6e7472616374206164647265737360501b606482015260840161037e565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b611208611583565b6000831161126e5760405162461bcd60e51b815260206004820152602d60248201527f4d61746368436f6e74726163743a204d617463684964206d757374206265206760448201526c0726561746572207468616e203609c1b606482015260840161037e565b6001600160a01b0382161580159061128e57506001600160a01b03811615155b6112f05760405162461bcd60e51b815260206004820152602d60248201527f4d61746368436f6e74726163743a20506c61796572206164647265737320636160448201526c6e6e6f7420626520656d70747960981b606482015260840161037e565b806001600160a01b0316826001600160a01b0316036113705760405162461bcd60e51b815260206004820152603660248201527f4d61746368436f6e74726163743a2054776f20706c61796572206164647265736044820152757365732063616e6e6f74206265207468652073616d6560501b606482015260840161037e565b600083815260046020526040902060018101546001600160a01b03161580156113b157506000600982015460ff1660058111156113af576113af6117a6565b145b6114235760405162461bcd60e51b815260206004820152603860248201527f4d61746368436f6e74726163743a20546865206d61746368496420616c72656160448201527f647920657869737473206f722068617320737461727465640000000000000000606482015260840161037e565b600084815260046020819052604082208681556001810180546001600160a01b03199081166001600160a01b038981169182179093556002840186905560038401805461010061ffff199182168117909255958501805490931693891693909317909155600583019490945560068201805490931681179092556007810180546001600160a81b03191692909302919091179091556114c3603c42611983565b600882018190556009820180546001600160a81b03191660021790556007820154604080516001600160a01b036101009093048316815242602082015290810192909252848116919086169087907f559375f5588a0476a76232eeff01f58e107e094ed42b7ad28ddfb2b92463b9389060600160405180910390a45050505050565b61154d611583565b6001600160a01b03811661157757604051631e4fbdf760e01b81526000600482015260240161037e565b611580816115b0565b50565b6000546001600160a01b03163314610a7d5760405163118cdaa760e01b815233600482015260240161037e565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60008181526004602052604090206005600982015460ff166005811115611629576116296117a6565b036116855760405162461bcd60e51b815260206004820152602660248201527f4d61746368436f6e74726163743a204d6174636820616c726561647920636f6e60448201526518db1d59195960d21b606482015260840161037e565b6005810154600282015460009110156116ac575060018101546001600160a01b03166116d4565b6002820154600583015411156116d0575060048101546001600160a01b03166116d4565b5060005b60098201805460056001600160a81b03199091166101006001600160a01b03851690810260ff1916919091178217909255600284015490840154604080519283526020830191909152805186927fcf21476e48a91f70cc503e2917f4c4a58fa61cd4e2c075cf12ab0a7fb14335ba92908290030190a3505050565b80356001600160a01b038116811461176657600080fd5b919050565b60006020828403121561177d57600080fd5b6117868261174f565b9392505050565b60006020828403121561179f57600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b8881526101c081016117fd602083018a80516001600160a01b031682526020808201519083015260408082015160ff16908301526060908101511515910152565b87516001600160a01b031660a0830152602088015160c0830152604088015160ff1660e08301526060880151151561010083015260ff87166101208301526001600160a01b0386811661014084015261016083018690526006851061187257634e487b7160e01b600052602160045260246000fd5b846101808401528084166101a0840152509998505050505050505050565b6000806000606084860312156118a557600080fd5b833592506118b56020850161174f565b91506118c36040850161174f565b90509250925092565b600080600080608085870312156118e257600080fd5b843593506118f26020860161174f565b9250604085013591506060850135801515811461190e57600080fd5b939692955090935050565b60208082526034908201527f4d61746368436f6e74726163743a204d61746368206e6f7420696e697469616c60408201527334bd32b21037b91024a21036b4b9b6b0ba31b41760611b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b808201808211156119965761199661196d565b92915050565b6000600182016119ae576119ae61196d565b5060010190565b600060ff821660ff81036119cb576119cb61196d565b6001019291505056fea2646970667358221220a157780681414605ea3e18f2a04135218ec2a892c673a3bae3f9b6707b0062e164736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101005760003560e01c80638da5cb5b11610097578063be50d65b11610066578063be50d65b146102d4578063e867344c146102e7578063f2fde38b146102fa578063f7ef9f4f1461030d57600080fd5b80638da5cb5b14610287578063900cc19e146102985780639158f979146102ab578063a027bf24146102c157600080fd5b806347b7cf34116100d357806347b7cf341461023f5780634de7a65d14610259578063715018a61461026c5780637552aefd1461027457600080fd5b806316c1e3561461010557806319d448df14610135578063382eee021461014a5780634768d4ef1461015d575b600080fd5b600354610118906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61014861014336600461176b565b610315565b005b61014861015836600461176b565b6103a9565b61022b61016b36600461178d565b600460208181526000928352604092839020805484516080808201875260018401546001600160a01b039081168352600285015483870152600385015460ff808216858b015261010091829004811615156060808701919091528a519485018b52988701548316845260058701549784019790975260068601548088169984019990995297889004861615159682019690965260078401546008850154600990950154939792969195818116959184900483169491939082169291041688565b60405161012c9897969594939291906117bc565b610247600a81565b60405160ff909116815260200161012c565b610148610267366004611890565b61044f565b610148610a6b565b600254610118906001600160a01b031681565b6000546001600160a01b0316610118565b600154610118906001600160a01b031681565b6102b3603c81565b60405190815260200161012c565b6101486102cf3660046118cc565b610a7f565b6101486102e236600461176b565b611161565b6101486102f5366004611890565b611200565b61014861030836600461176b565b611545565b610247600381565b61031d611583565b6001600160a01b0381166103875760405162461bcd60e51b815260206004820152602660248201527f4d61746368436f6e74726163743a20496e76616c69642072656665726565206160448201526564647265737360d01b60648201526084015b60405180910390fd5b600380546001600160a01b0319166001600160a01b0392909216919091179055565b6103b1611583565b6001600160a01b03811661042d5760405162461bcd60e51b815260206004820152603860248201527f4d61746368436f6e74726163743a20496e76616c69642061756469656e63652060448201527f6d616e6167657220636f6e747261637420616464726573730000000000000000606482015260840161037e565b600280546001600160a01b0319166001600160a01b0392909216919091179055565b610457611583565b6000838152600460205260409020805484146104855760405162461bcd60e51b815260040161037e90611919565b6003600982015460ff1660058111156104a0576104a06117a6565b14806104c457506004600982015460ff1660058111156104c2576104c26117a6565b145b6105455760405162461bcd60e51b815260206004820152604660248201527f4d61746368436f6e74726163743a204d61746368206973206e6f7420696e206160448201527f207374617465207768657265206120706c617965722063616e206265207265706064820152653630b1b2b21760d11b608482015260a40161037e565b6001600160a01b0383161580159061056557506001600160a01b03821615155b6105c95760405162461bcd60e51b815260206004820152602f60248201527f4d61746368436f6e74726163743a20506c61796572206164647265737365732060448201526e31b0b73737ba103132903d32b9379760891b606482015260840161037e565b816001600160a01b0316836001600160a01b0316036106605760405162461bcd60e51b815260206004820152604760248201527f4d61746368436f6e74726163743a204e657720706c617965722063616e6e6f7460448201527f206265207468652073616d6520617320746865206f6e65206265696e67207265606482015266383630b1b2b21760c91b608482015260a40161037e565b6000806003600984015460ff16600581111561067e5761067e6117a6565b036107485760018301546001600160a01b0386811691161461072e5760405162461bcd60e51b815260206004820152605760248201527f4d61746368436f6e74726163743a20506c6179657220746f207265706c61636560448201527f20646f6573206e6f74206d61746368207265706c61636561626c65207374617460648201527f75732028657870656374656420506c617965722041292e000000000000000000608482015260a40161037e565b5050600481015460018201906001600160a01b0316610809565b60048301546001600160a01b038681169116146107f35760405162461bcd60e51b815260206004820152605760248201527f4d61746368436f6e74726163743a20506c6179657220746f207265706c61636560448201527f20646f6573206e6f74206d61746368207265706c61636561626c65207374617460648201527f75732028657870656374656420506c617965722042292e000000000000000000608482015260a40161037e565b5050600181015460048201906001600160a01b03165b806001600160a01b0316846001600160a01b0316036108855760405162461bcd60e51b815260206004820152603260248201527f4d61746368436f6e74726163743a204e657720706c6179657220697320616c7260448201527132b0b23c903a34329037b83837b732b73a1760711b606482015260840161037e565b60028201805461ff001916905560018301546001600160a01b039081169086160361090e57604080516080810182526001600160a01b03861680825260018086015460208401819052600094840194909452606090920182905290850180546001600160a01b0319169091179055600284015560038301805461ffff1916610100179055610970565b604080516080810182526001600160a01b038616808252600180860154602084018190526000948401949094526060909201919091526004850180546001600160a01b0319169091179055600584015560068301805461ffff19166101001790555b60098301805460ff1916600217905560078301546001600160a01b0386811661010090920416036109be57600783018054610100600160a81b0319166101006001600160a01b038716021790555b6109c9603c42611983565b60088401556040516001600160a01b03808616919087169088907fdad1dbb9a78bbc7279b8af6b35551eece4af2803c7d6a58bc4ab785b6ba9e11d90600090a4600783015460088401546040805160ff841681526101009093046001600160a01b0316602084015282015286907fa59e669b9093ccc4685ff4947c2078b7953c77c29fac76c44bc195ee0e0b39169060600160405180910390a2505050505050565b610a73611583565b610a7d60006115b0565b565b6003546001600160a01b03163314610af55760405162461bcd60e51b815260206004820152603360248201527f4d61746368436f6e74726163743a2043616c6c6572206973206e6f742074686560448201527220617574686f72697a6564207265666572656560681b606482015260840161037e565b600084815260046020526040902080548514610b235760405162461bcd60e51b815260040161037e90611919565b6002600982015460ff166005811115610b3e57610b3e6117a6565b1480610b6257506003600982015460ff166005811115610b6057610b606117a6565b145b80610b8557506004600982015460ff166005811115610b8357610b836117a6565b145b610bea5760405162461bcd60e51b815260206004820152603060248201527f4d61746368436f6e74726163743a204d61746368206973206e6f7420696e206160448201526f10383630bcb0b136329039ba30ba329760811b606482015260840161037e565b600781015460ff168314610c7b5760405162461bcd60e51b815260206004820152604c60248201527f4d61746368436f6e74726163743a205375626d697474656420726573756c742060448201527f697320666f7220616e206f75746461746564206f72206675747572652071756560648201526b39ba34b7b71034b73232bc1760a11b608482015260a40161037e565b60078101546001600160a01b038581166101009092041614610cfd5760405162461bcd60e51b815260206004820152603560248201527f4d61746368436f6e74726163743a2049742773206e6f74207468697320706c616044820152743cb2b913b9903a3ab937103a379030b739bbb2b91760591b606482015260840161037e565b600181015460009081906001600160a01b0390811690871603610d295750506001810160048201610dbe565b60048301546001600160a01b0390811690871603610d505750506004810160018201610dbe565b60405162461bcd60e51b815260206004820152603d60248201527f4d61746368436f6e74726163743a20506c617965722077686f20616e7377657260448201527f6564206973206e6f742070617274206f662074686973206d617463682e000000606482015260840161037e565b8315610ef557600182018054906000610dd68361199c565b909155505060028201805460ff191690556003600984015460ff166005811115610e0257610e026117a6565b148015610e1e575060018301546001600160a01b038781169116145b80610e5b57506004600984015460ff166005811115610e3f57610e3f6117a6565b148015610e5b575060048301546001600160a01b038781169116145b15610ef05760018301546000906001600160a01b038881169116148015610e9a57506004600985015460ff166005811115610e9857610e986117a6565b145b80610ed7575060048401546001600160a01b038881169116148015610ed757506003600985015460ff166005811115610ed557610ed56117a6565b145b905080610eee5760098401805460ff191660021790555b505b610fba565b60028201805460ff16906000610f0a836119b5565b82546101009290920a60ff818102199093169183160217909155600284015460039116109050610fba5760018301546001600160a01b0390811690871603610f605760098301805460ff19166003179055610f70565b60098301805460ff191660041790555b600282015460405160ff90911681526001600160a01b0387169088907f049048c07309020597ef2e5a5fae448927abaa6c58f51d707ab4a44bb4046b119060200160405180910390a35b60028301546005840154604080518715158152602081018490529081018290526001600160a01b0389169088908b907f409ee49d147354f7e1c81ec76ba3786269472b638ea50f010975cf5c579f5d379060600160405180910390a460078501805460ff1690600061102b836119b5565b82546101009290920a60ff8181021990931691831602179091556007870154600a91161090506110685761105e89611600565b505050505061115b565b600185015460078601546001600160a01b03918216610100909104909116036110bd5760048501546007860180546001600160a01b0390921661010002610100600160a81b03199092169190911790556110eb565b60018501546007860180546001600160a01b0390921661010002610100600160a81b03199092169190911790555b6110f6603c42611983565b6008860181905560078601546040805160ff831681526101009092046001600160a01b0316602083015281019190915289907fa59e669b9093ccc4685ff4947c2078b7953c77c29fac76c44bc195ee0e0b39169060600160405180910390a250505050505b50505050565b611169611583565b6001600160a01b0381166111de5760405162461bcd60e51b815260206004820152603660248201527f4d61746368436f6e74726163743a20496e76616c696420696d6d6f7274616c20604482015275626c6f636b20636f6e7472616374206164647265737360501b606482015260840161037e565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b611208611583565b6000831161126e5760405162461bcd60e51b815260206004820152602d60248201527f4d61746368436f6e74726163743a204d617463684964206d757374206265206760448201526c0726561746572207468616e203609c1b606482015260840161037e565b6001600160a01b0382161580159061128e57506001600160a01b03811615155b6112f05760405162461bcd60e51b815260206004820152602d60248201527f4d61746368436f6e74726163743a20506c61796572206164647265737320636160448201526c6e6e6f7420626520656d70747960981b606482015260840161037e565b806001600160a01b0316826001600160a01b0316036113705760405162461bcd60e51b815260206004820152603660248201527f4d61746368436f6e74726163743a2054776f20706c61796572206164647265736044820152757365732063616e6e6f74206265207468652073616d6560501b606482015260840161037e565b600083815260046020526040902060018101546001600160a01b03161580156113b157506000600982015460ff1660058111156113af576113af6117a6565b145b6114235760405162461bcd60e51b815260206004820152603860248201527f4d61746368436f6e74726163743a20546865206d61746368496420616c72656160448201527f647920657869737473206f722068617320737461727465640000000000000000606482015260840161037e565b600084815260046020819052604082208681556001810180546001600160a01b03199081166001600160a01b038981169182179093556002840186905560038401805461010061ffff199182168117909255958501805490931693891693909317909155600583019490945560068201805490931681179092556007810180546001600160a81b03191692909302919091179091556114c3603c42611983565b600882018190556009820180546001600160a81b03191660021790556007820154604080516001600160a01b036101009093048316815242602082015290810192909252848116919086169087907f559375f5588a0476a76232eeff01f58e107e094ed42b7ad28ddfb2b92463b9389060600160405180910390a45050505050565b61154d611583565b6001600160a01b03811661157757604051631e4fbdf760e01b81526000600482015260240161037e565b611580816115b0565b50565b6000546001600160a01b03163314610a7d5760405163118cdaa760e01b815233600482015260240161037e565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60008181526004602052604090206005600982015460ff166005811115611629576116296117a6565b036116855760405162461bcd60e51b815260206004820152602660248201527f4d61746368436f6e74726163743a204d6174636820616c726561647920636f6e60448201526518db1d59195960d21b606482015260840161037e565b6005810154600282015460009110156116ac575060018101546001600160a01b03166116d4565b6002820154600583015411156116d0575060048101546001600160a01b03166116d4565b5060005b60098201805460056001600160a81b03199091166101006001600160a01b03851690810260ff1916919091178217909255600284015490840154604080519283526020830191909152805186927fcf21476e48a91f70cc503e2917f4c4a58fa61cd4e2c075cf12ab0a7fb14335ba92908290030190a3505050565b80356001600160a01b038116811461176657600080fd5b919050565b60006020828403121561177d57600080fd5b6117868261174f565b9392505050565b60006020828403121561179f57600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b8881526101c081016117fd602083018a80516001600160a01b031682526020808201519083015260408082015160ff16908301526060908101511515910152565b87516001600160a01b031660a0830152602088015160c0830152604088015160ff1660e08301526060880151151561010083015260ff87166101208301526001600160a01b0386811661014084015261016083018690526006851061187257634e487b7160e01b600052602160045260246000fd5b846101808401528084166101a0840152509998505050505050505050565b6000806000606084860312156118a557600080fd5b833592506118b56020850161174f565b91506118c36040850161174f565b90509250925092565b600080600080608085870312156118e257600080fd5b843593506118f26020860161174f565b9250604085013591506060850135801515811461190e57600080fd5b939692955090935050565b60208082526034908201527f4d61746368436f6e74726163743a204d61746368206e6f7420696e697469616c60408201527334bd32b21037b91024a21036b4b9b6b0ba31b41760611b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b808201808211156119965761199661196d565b92915050565b6000600182016119ae576119ae61196d565b5060010190565b600060ff821660ff81036119cb576119cb61196d565b6001019291505056fea2646970667358221220a157780681414605ea3e18f2a04135218ec2a892c673a3bae3f9b6707b0062e164736f6c63430008140033",
+  "devdoc": {
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "replacePlayer(uint256,address,address)": {
+        "details": "由管理员调用，用一名新选手替换场上当前处于可替换状态的选手。 新选手将继承被替换选手的得分，但连续答错次数重置为0。 比赛状态将恢复为 InProgress。",
+        "params": {
+          "_matchId": "比赛ID。",
+          "_newPlayer": "将上场替换的新选手的地址（原观众）。",
+          "_playerToReplace": "将被替换的场上选手的地址。"
+        }
+      },
+      "startMatch(uint256,address,address)": {
+        "details": "由管理员调用，用于初始化并开始一场新的比赛。",
+        "params": {
+          "_matchId": "比赛ID，应与 MatchRegistry 中生成的一致。",
+          "_playerA": "选手A的地址。",
+          "_playerB": "选手B的地址。"
+        }
+      },
+      "submitAnswerResult(uint256,address,uint256,bool)": {
+        "details": "由裁判调用，提交选手对当前问题的回答结果。 即使选手进入可替换状态，比赛也会继续进行。",
+        "params": {
+          "_isCorrect": "回答是否正确。",
+          "_matchId": "比赛ID。",
+          "_playerWhoAnswered": "回答问题的选手地址。",
+          "_questionIndex": "回答的问题索引。"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8,
+        "contract": "contracts/MatchContract.sol:MatchContract",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 852,
+        "contract": "contracts/MatchContract.sol:MatchContract",
+        "label": "immortalBlockContractAddress",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 854,
+        "contract": "contracts/MatchContract.sol:MatchContract",
+        "label": "audienceManagerContractAddress",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 856,
+        "contract": "contracts/MatchContract.sol:MatchContract",
+        "label": "refereeAddress",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      },
+      {
+        "astId": 897,
+        "contract": "contracts/MatchContract.sol:MatchContract",
+        "label": "matches",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_uint256,t_struct(Match)892_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_enum(MatchStatus)872": {
+        "encoding": "inplace",
+        "label": "enum MatchContract.MatchStatus",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_uint256,t_struct(Match)892_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct MatchContract.Match)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Match)892_storage"
+      },
+      "t_struct(Match)892_storage": {
+        "encoding": "inplace",
+        "label": "struct MatchContract.Match",
+        "members": [
+          {
+            "astId": 874,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "matchId",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 877,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "playerA",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_struct(PlayerMatchState)865_storage"
+          },
+          {
+            "astId": 880,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "playerB",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_struct(PlayerMatchState)865_storage"
+          },
+          {
+            "astId": 882,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "currentQuestionIndex",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint8"
+          },
+          {
+            "astId": 884,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "currentPlayerTurn",
+            "offset": 1,
+            "slot": "7",
+            "type": "t_address"
+          },
+          {
+            "astId": 886,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "currentQuestionDeadline",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 889,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "status",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_enum(MatchStatus)872"
+          },
+          {
+            "astId": 891,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "winner",
+            "offset": 1,
+            "slot": "9",
+            "type": "t_address"
+          }
+        ],
+        "numberOfBytes": "320"
+      },
+      "t_struct(PlayerMatchState)865_storage": {
+        "encoding": "inplace",
+        "label": "struct MatchContract.PlayerMatchState",
+        "members": [
+          {
+            "astId": 858,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "playerAddress",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 860,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "score",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 862,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "consecutiveWrongAnswers",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint8"
+          },
+          {
+            "astId": 864,
+            "contract": "contracts/MatchContract.sol:MatchContract",
+            "label": "isActive",
+            "offset": 1,
+            "slot": "2",
+            "type": "t_bool"
+          }
+        ],
+        "numberOfBytes": "96"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      },
+      "t_uint8": {
+        "encoding": "inplace",
+        "label": "uint8",
+        "numberOfBytes": "1"
+      }
+    }
+  }
+}
