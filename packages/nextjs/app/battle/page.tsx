@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { AudienceSeating } from "~~/components/AudienceSeating";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 
 interface Question {
   id: number;
@@ -16,6 +17,29 @@ interface PlayerAnswer {
   playerId: "A" | "B";
   questionId: number;
   selectedOption: number;
+}
+
+// 生成8位随机数字字符串
+function getRandomMatchId() {
+  return Math.floor(10000000 + Math.random() * 90000000);
+}
+
+// 生成随机以太坊地址
+function getRandomAddress() {
+  // 0x + 40位十六进制
+  const bytes = new Uint8Array(20);
+  if (typeof window !== "undefined" && window.crypto && window.crypto.getRandomValues) {
+    window.crypto.getRandomValues(bytes);
+  } else {
+    // fallback: 全 0
+    bytes.fill(0);
+  }
+  return (
+    "0x" +
+    Array.from(bytes)
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("")
+  );
 }
 
 export default function BattlePage() {
@@ -47,6 +71,16 @@ export default function BattlePage() {
     return answer?.selectedOption;
   };
 
+  // 合约写操作hook
+  const { writeContractAsync: startMatchAsync } = useScaffoldWriteContract({ contractName: "MatchContract" });
+  const { writeContractAsync: submitAnswerResultAsync } = useScaffoldWriteContract({ contractName: "MatchContract" });
+  // 初始化比赛状态
+  const [initing, setIniting] = useState(true);
+  // 用useRef保存matchId和玩家地址，便于后续合约调用
+  const matchIdRef = useRef<number | null>(null);
+  const playerARef = useRef<string | null>(null);
+  const playerBRef = useRef<string | null>(null);
+
   // 获取新题目
   const fetchQuiz = async () => {
     setLoading(true);
@@ -76,13 +110,33 @@ export default function BattlePage() {
     setLoading(false);
   };
 
-  // 首次加载获取第一题
+  // 首次加载初始化比赛
   useEffect(() => {
-    if (questions.length === 0) {
-      fetchQuiz();
+    if (questions.length === 0 && initing) {
+      // 生成随机参数
+      const _matchId = getRandomMatchId();
+      const _playerA = getRandomAddress();
+      const _playerB = getRandomAddress();
+      matchIdRef.current = _matchId;
+      playerARef.current = _playerA;
+      playerBRef.current = _playerB;
+      setAiSpeech("⚔️ 正在初始化比赛...");
+      // 调用合约
+      startMatchAsync({
+        functionName: "startMatch",
+        args: [BigInt(_matchId), _playerA, _playerB],
+      })
+        .then(() => {
+          setAiSpeech("🤖 正在出题中...");
+          setIniting(false);
+          fetchQuiz();
+        })
+        .catch(() => {
+          setAiSpeech("❌ 比赛初始化失败，请刷新重试");
+        });
     }
     // eslint-disable-next-line
-  }, []);
+  }, [initing, questions.length]);
 
   // 自动播放音频
   useEffect(() => {
@@ -92,7 +146,7 @@ export default function BattlePage() {
     }
   }, [currentQuestion, questions]);
 
-  const handlePlayerAnswer = (playerId: "A" | "B", selectedOption: number) => {
+  const handlePlayerAnswer = async (playerId: "A" | "B", selectedOption: number) => {
     const newAnswer: PlayerAnswer = {
       playerId,
       questionId: questions[currentQuestion].id,
@@ -101,6 +155,27 @@ export default function BattlePage() {
 
     setPlayerAnswers(prev => [...prev, newAnswer]);
     setAiSpeech(`🎯 选手 ${playerId} 已选择答案！`);
+
+    // 获取合约参数
+    const _matchId = matchIdRef.current;
+    const _questionIndex = currentQuestion;
+    let _playerWhoAnswered = "0x0000000000000000000000000000000000000000";
+    if (playerId === "A") {
+      _playerWhoAnswered = playerARef.current || _playerWhoAnswered;
+    } else {
+      _playerWhoAnswered = playerBRef.current || _playerWhoAnswered;
+    }
+    const _isCorrect = selectedOption === questions[currentQuestion].correctAnswer;
+
+    // 调用submitAnswerResult合约
+    if (_matchId && _playerWhoAnswered) {
+      try {
+        await submitAnswerResultAsync({
+          functionName: "submitAnswerResult",
+          args: [BigInt(_matchId), _playerWhoAnswered, BigInt(_questionIndex), _isCorrect],
+        });
+      } catch {} // 可以根据需要提示错误
+    }
 
     const otherPlayerId = playerId === "A" ? "B" : "A";
     const otherPlayerAnswered = hasPlayerAnswered(otherPlayerId, questions[currentQuestion].id);
@@ -251,6 +326,15 @@ export default function BattlePage() {
             重新开始战斗
           </motion.button>
         </div>
+      </div>
+    );
+  }
+
+  // 如果正在初始化比赛，显示提示
+  if (initing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black text-white flex items-center justify-center">
+        <div className="text-3xl font-bold text-cyan-400 animate-pulse">{aiSpeech}</div>
       </div>
     );
   }

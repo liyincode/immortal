@@ -14766,6 +14766,7 @@ __metadata:
   dependencies:
     husky: ~9.1.6
     lint-staged: ~13.2.2
+    viem: ^2.30.6
   languageName: unknown
   linkType: soft
 
@@ -16924,7 +16925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:>=2.23.11, viem@npm:^2.1.1, viem@npm:^2.27.0":
+"viem@npm:>=2.23.11, viem@npm:^2.1.1, viem@npm:^2.27.0, viem@npm:^2.30.6":
   version: 2.30.6
   resolution: "viem@npm:2.30.6"
   dependencies:
