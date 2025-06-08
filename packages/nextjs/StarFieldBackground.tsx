@@ -23,9 +23,16 @@ interface Meteor {
   delay: number;
 }
 
+interface Dust {
+  id: number;
+  x: number;
+  y: number;
+}
+
 export function StarFieldBackground() {
   const [stars, setStars] = useState<Star[]>([]);
   const [meteors, setMeteors] = useState<Meteor[]>([]);
+  const [dusts, setDusts] = useState<Dust[]>([]);
 
   // 生成星星
   useEffect(() => {
@@ -110,6 +117,19 @@ export function StarFieldBackground() {
     // 每隔一段时间重新生成流星
     const interval = setInterval(generateMeteors, 15000);
     return () => clearInterval(interval);
+  }, []);
+
+  // 生成宇宙尘埃
+  useEffect(() => {
+    const dustArray: Dust[] = [];
+    for (let i = 0; i < 30; i++) {
+      dustArray.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+      });
+    }
+    setDusts(dustArray);
   }, []);
 
   return (
@@ -356,13 +376,13 @@ export function StarFieldBackground() {
 
       {/* 宇宙尘埃效果 */}
       <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
+        {dusts.map(dust => (
           <motion.div
-            key={`dust-${i}`}
+            key={`dust-${dust.id}`}
             className="absolute w-0.5 h-0.5 bg-white rounded-full opacity-30"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${dust.x}%`,
+              top: `${dust.y}%`,
             }}
             animate={{
               x: [0, Math.random() * 100 - 50],
