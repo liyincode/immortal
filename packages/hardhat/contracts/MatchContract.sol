@@ -184,58 +184,53 @@ contract MatchContract is Ownable {
     }
 
     // --- 内部函数 ---
-/**
- * @dev 内部函数，用于结束比赛，判定胜者，并记录到不朽链。
- * @param _matchId 要结束的比赛ID。
- */
-function _concludeMatch(uint256 _matchId) internal {
-    Match storage concludedMatch = matches[_matchId];
+    /**
+     * @dev 内部函数，用于结束比赛，判定胜者，并记录到不朽链。
+     * @param _matchId 要结束的比赛ID。
+     */
+    function _concludeMatch(uint256 _matchId) internal {
+        Match storage concludedMatch = matches[_matchId];
 
-    // 防止重复结束
-    require(concludedMatch.status != MatchStatus.Concluded, "MatchContract: Match already concluded");
+        // 防止重复结束
+        require(concludedMatch.status != MatchStatus.Concluded, "MatchContract: Match already concluded");
 
-    address winningPlayer;
-    if (concludedMatch.playerA.score > concludedMatch.playerB.score) {
-        winningPlayer = concludedMatch.playerA.playerAddress;
-    } else if (concludedMatch.playerB.score > concludedMatch.playerA.score) {
-        winningPlayer = concludedMatch.playerB.playerAddress;
-    } else {
-        winningPlayer = address(0); // 平局
+        address winningPlayer;
+        if (concludedMatch.playerA.score > concludedMatch.playerB.score) {
+            winningPlayer = concludedMatch.playerA.playerAddress;
+        } else if (concludedMatch.playerB.score > concludedMatch.playerA.score) {
+            winningPlayer = concludedMatch.playerB.playerAddress;
+        } else {
+            winningPlayer = address(0); // 平局
+        }
+
+        concludedMatch.winner = winningPlayer;
+        concludedMatch.status = MatchStatus.Concluded;
+
+        emit MatchConcluded(_matchId, winningPlayer, concludedMatch.playerA.score, concludedMatch.playerB.score);
+
+        // 调用不朽链合约记录结果
+        // 假设 ImmortalBlock.sol 有一个函数 forgeBlock(uint256 matchId, address winner, uint256 scoreA, uint256 scoreB)
+        // 并且本合约地址被授权调用它（例如 ImmortalBlock 也 Ownable，且 owner 是同一个人，或者 ImmortalBlock 有授权机制）
+        // 为了V1简化，我们假设 ImmortalBlock 的 forgeBlock 可以被任何人调用，或者是由本合约 Owner 后期手动整理数据调用。
+        // 如果要直接调用，需要定义接口 IImmortalBlock
+        // IImmortalBlock(immortalBlockContractAddress).forgeBlock(_matchId, winningPlayer, ...);
+        // 为简单起见，V1版本中，MatchContract仅发出事件，实际写入ImmortalBlock可由管理员根据事件链下触发，
+        // 或者我们假设有一个简单的 forgeBlock 接口。
+        // 我们先专注于 MatchContract 的逻辑。与 ImmortalBlock 的交互可以后续细化。
+        // 例如，可以简单地尝试调用，如果失败，事件仍然发出，数据仍在 MatchContract 中。
+
+        // 示例：尝试调用一个简化的 ImmortalBlock 函数
+        // function recordVictory(uint256 _mId, address _winAddr) external;
+        // (bool success, ) = immortalBlockContractAddress.call(
+        //     abi.encodeWithSignature("recordVictory(uint256,address)", _matchId, winningPlayer)
+        // );
+        // if (!success) {
+        //     // 可选：发出一个调用失败的事件或日志
+        //     console.log("Failed to record victory on ImmortalBlock for match %s", _matchId);
+        // }
     }
 
-    concludedMatch.winner = winningPlayer;
-    concludedMatch.status = MatchStatus.Concluded;
-
-    emit MatchConcluded(
-        _matchId,
-        winningPlayer,
-        concludedMatch.playerA.score,
-        concludedMatch.playerB.score
-    );
-
-    // 调用不朽链合约记录结果
-    // 假设 ImmortalBlock.sol 有一个函数 forgeBlock(uint256 matchId, address winner, uint256 scoreA, uint256 scoreB)
-    // 并且本合约地址被授权调用它（例如 ImmortalBlock 也 Ownable，且 owner 是同一个人，或者 ImmortalBlock 有授权机制）
-    // 为了V1简化，我们假设 ImmortalBlock 的 forgeBlock 可以被任何人调用，或者是由本合约 Owner 后期手动整理数据调用。
-    // 如果要直接调用，需要定义接口 IImmortalBlock
-    // IImmortalBlock(immortalBlockContractAddress).forgeBlock(_matchId, winningPlayer, ...);
-    // 为简单起见，V1版本中，MatchContract仅发出事件，实际写入ImmortalBlock可由管理员根据事件链下触发，
-    // 或者我们假设有一个简单的 forgeBlock 接口。
-    // 我们先专注于 MatchContract 的逻辑。与 ImmortalBlock 的交互可以后续细化。
-    // 例如，可以简单地尝试调用，如果失败，事件仍然发出，数据仍在 MatchContract 中。
-
-    // 示例：尝试调用一个简化的 ImmortalBlock 函数
-    // function recordVictory(uint256 _mId, address _winAddr) external;
-    // (bool success, ) = immortalBlockContractAddress.call(
-    //     abi.encodeWithSignature("recordVictory(uint256,address)", _matchId, winningPlayer)
-    // );
-    // if (!success) {
-    //     // 可选：发出一个调用失败的事件或日志
-    //     console.log("Failed to record victory on ImmortalBlock for match %s", _matchId);
-    // }
-}
-
-/**
+    /**
      * @dev 由裁判调用，提交选手对当前问题的回答结果。
      * 即使选手进入可替换状态，比赛也会继续进行。
      * @param _matchId 比赛ID。
@@ -248,7 +243,7 @@ function _concludeMatch(uint256 _matchId) internal {
         address _playerWhoAnswered,
         uint256 _questionIndex,
         bool _isCorrect
-    ) external onlyReferee { // 只有裁判可以调用
+    ) public {
         Match storage currentMatch = matches[_matchId];
 
         // --- 验证阶段 ---
@@ -256,12 +251,18 @@ function _concludeMatch(uint256 _matchId) internal {
         // 比赛状态可以是 InProgress, PlayerAReplaceable, 或 PlayerBReplaceable，都允许提交答案
         require(
             currentMatch.status == MatchStatus.InProgress ||
-            currentMatch.status == MatchStatus.PlayerAReplaceable ||
-            currentMatch.status == MatchStatus.PlayerBReplaceable,
+                currentMatch.status == MatchStatus.PlayerAReplaceable ||
+                currentMatch.status == MatchStatus.PlayerBReplaceable,
             "MatchContract: Match is not in a playable state." // 英文提示：比赛未处于可进行状态
         );
-        require(_questionIndex == currentMatch.currentQuestionIndex, "MatchContract: Submitted result is for an outdated or future question index.");
-        require(_playerWhoAnswered == currentMatch.currentPlayerTurn, "MatchContract: It's not this player's turn to answer.");
+        require(
+            _questionIndex == currentMatch.currentQuestionIndex,
+            "MatchContract: Submitted result is for an outdated or future question index."
+        );
+        require(
+            _playerWhoAnswered == currentMatch.currentPlayerTurn,
+            "MatchContract: It's not this player's turn to answer."
+        );
 
         // --- 获取选手状态存储指针 ---
         PlayerMatchState storage answeringPlayerState;
@@ -283,17 +284,23 @@ function _concludeMatch(uint256 _matchId) internal {
             answeringPlayerState.consecutiveWrongAnswers = 0;
             // 如果选手之前处于可替换状态，但现在答对了，可以将比赛状态恢复为 InProgress
             // （前提是对手也不是可替换状态）
-            if (currentMatch.status == MatchStatus.PlayerAReplaceable && _playerWhoAnswered == currentMatch.playerA.playerAddress ||
-                currentMatch.status == MatchStatus.PlayerBReplaceable && _playerWhoAnswered == currentMatch.playerB.playerAddress) {
-                 // 检查对手状态，只有当对手也不是Replaceable时才恢复为InProgress
-                bool opponentIsReplaceable = (_playerWhoAnswered == currentMatch.playerA.playerAddress && currentMatch.status == MatchStatus.PlayerBReplaceable) ||
-                                             (_playerWhoAnswered == currentMatch.playerB.playerAddress && currentMatch.status == MatchStatus.PlayerAReplaceable);
+            if (
+                (currentMatch.status == MatchStatus.PlayerAReplaceable &&
+                    _playerWhoAnswered == currentMatch.playerA.playerAddress) ||
+                (currentMatch.status == MatchStatus.PlayerBReplaceable &&
+                    _playerWhoAnswered == currentMatch.playerB.playerAddress)
+            ) {
+                // 检查对手状态，只有当对手也不是Replaceable时才恢复为InProgress
+                bool opponentIsReplaceable = (_playerWhoAnswered == currentMatch.playerA.playerAddress &&
+                    currentMatch.status == MatchStatus.PlayerBReplaceable) ||
+                    (_playerWhoAnswered == currentMatch.playerB.playerAddress &&
+                        currentMatch.status == MatchStatus.PlayerAReplaceable);
                 if (!opponentIsReplaceable) {
                     currentMatch.status = MatchStatus.InProgress;
                 }
             }
-
-        } else { // 回答错误
+        } else {
+            // 回答错误
             answeringPlayerState.consecutiveWrongAnswers++;
             if (answeringPlayerState.consecutiveWrongAnswers >= MAX_CONSECUTIVE_WRONG_ANSWERS_FOR_REPLACEMENT) {
                 // 即使状态已经是 PlayerAReplaceable/PlayerBReplaceable，再次触发事件也无妨，表明又错了一次
@@ -302,7 +309,11 @@ function _concludeMatch(uint256 _matchId) internal {
                 } else {
                     currentMatch.status = MatchStatus.PlayerBReplaceable;
                 }
-                emit PlayerBecameReplaceable(_matchId, _playerWhoAnswered, answeringPlayerState.consecutiveWrongAnswers);
+                emit PlayerBecameReplaceable(
+                    _matchId,
+                    _playerWhoAnswered,
+                    answeringPlayerState.consecutiveWrongAnswers
+                );
             }
         }
 
@@ -344,6 +355,7 @@ function _concludeMatch(uint256 _matchId) internal {
             currentMatch.currentQuestionDeadline
         );
     }
+
     /**
      * @dev 由管理员调用，用一名新选手替换场上当前处于可替换状态的选手。
      * 新选手将继承被替换选手的得分，但连续答错次数重置为0。
@@ -352,43 +364,54 @@ function _concludeMatch(uint256 _matchId) internal {
      * @param _playerToReplace 将被替换的场上选手的地址。
      * @param _newPlayer 将上场替换的新选手的地址（原观众）。
      */
-    function replacePlayer(
-        uint256 _matchId,
-        address _playerToReplace,
-        address _newPlayer
-    ) external onlyOwner { // 只有合约拥有者（管理员）可以执行此操作
+    function replacePlayer(uint256 _matchId, address _playerToReplace, address _newPlayer) external onlyOwner {
+        // 只有合约拥有者（管理员）可以执行此操作
         Match storage currentMatch = matches[_matchId];
 
         // --- 验证阶段 ---
         require(currentMatch.matchId == _matchId, "MatchContract: Match not initialized or ID mismatch."); // 英文提示
         require(
-            currentMatch.status == MatchStatus.PlayerAReplaceable || currentMatch.status == MatchStatus.PlayerBReplaceable,
+            currentMatch.status == MatchStatus.PlayerAReplaceable ||
+                currentMatch.status == MatchStatus.PlayerBReplaceable,
             "MatchContract: Match is not in a state where a player can be replaced." // 英文提示
         );
-        require(_playerToReplace != address(0) && _newPlayer != address(0), "MatchContract: Player addresses cannot be zero."); // 英文提示
-        require(_playerToReplace != _newPlayer, "MatchContract: New player cannot be the same as the one being replaced."); // 英文提示
+        require(
+            _playerToReplace != address(0) && _newPlayer != address(0),
+            "MatchContract: Player addresses cannot be zero."
+        ); // 英文提示
+        require(
+            _playerToReplace != _newPlayer,
+            "MatchContract: New player cannot be the same as the one being replaced."
+        ); // 英文提示
 
         PlayerMatchState storage playerStateToUpdate;
         address opponentAddress;
 
         // 确认 _playerToReplace 是哪位选手，并获取其状态存储指针
         if (currentMatch.status == MatchStatus.PlayerAReplaceable) {
-            require(_playerToReplace == currentMatch.playerA.playerAddress, "MatchContract: Player to replace does not match replaceable status (expected Player A)."); // 英文提示
+            require(
+                _playerToReplace == currentMatch.playerA.playerAddress,
+                "MatchContract: Player to replace does not match replaceable status (expected Player A)."
+            ); // 英文提示
             playerStateToUpdate = currentMatch.playerA;
             opponentAddress = currentMatch.playerB.playerAddress;
-        } else { // currentMatch.status == MatchStatus.PlayerBReplaceable
-            require(_playerToReplace == currentMatch.playerB.playerAddress, "MatchContract: Player to replace does not match replaceable status (expected Player B)."); // 英文提示
+        } else {
+            // currentMatch.status == MatchStatus.PlayerBReplaceable
+            require(
+                _playerToReplace == currentMatch.playerB.playerAddress,
+                "MatchContract: Player to replace does not match replaceable status (expected Player B)."
+            ); // 英文提示
             playerStateToUpdate = currentMatch.playerB;
             opponentAddress = currentMatch.playerA.playerAddress;
         }
-        
+
         // 确保新选手不是场上的另一位对手
         require(_newPlayer != opponentAddress, "MatchContract: New player is already the opponent."); // 英文提示
 
         // --- 执行替换 ---
 
         // 1. 标记旧选手不再活跃
-        playerStateToUpdate.isActive = false; 
+        playerStateToUpdate.isActive = false;
         // 旧选手的得分和最终的连续答错次数保留在 playerStateToUpdate 中，作为历史记录。
         // 但由于 playerStateToUpdate 是一个 storage pointer，接下来我们会覆盖它的内容。
         // 如果需要保留旧选手的完整最终状态，需要先复制一份或有单独的存储。
@@ -400,14 +423,14 @@ function _concludeMatch(uint256 _matchId) internal {
             currentMatch.playerA = PlayerMatchState({
                 playerAddress: _newPlayer,
                 score: playerStateToUpdate.score, // 继承得分
-                consecutiveWrongAnswers: 0,       // 重置连续答错
+                consecutiveWrongAnswers: 0, // 重置连续答错
                 isActive: true
             });
         } else {
             currentMatch.playerB = PlayerMatchState({
                 playerAddress: _newPlayer,
                 score: playerStateToUpdate.score, // 继承得分
-                consecutiveWrongAnswers: 0,       // 重置连续答错
+                consecutiveWrongAnswers: 0, // 重置连续答错
                 isActive: true
             });
         }

@@ -73,7 +73,7 @@ export default function BattlePage() {
 
   // 合约写操作hook
   const { writeContractAsync: startMatchAsync } = useScaffoldWriteContract({ contractName: "MatchContract" });
-  const { writeContractAsync: submitAnswerResultAsync } = useScaffoldWriteContract({ contractName: "MatchContract" });
+
   // 初始化比赛状态
   const [initing, setIniting] = useState(true);
   // 用useRef保存matchId和玩家地址，便于后续合约调用
@@ -156,27 +156,6 @@ export default function BattlePage() {
     setPlayerAnswers(prev => [...prev, newAnswer]);
     setAiSpeech(`🎯 选手 ${playerId} 已选择答案！`);
 
-    // 获取合约参数
-    const _matchId = matchIdRef.current;
-    const _questionIndex = currentQuestion;
-    let _playerWhoAnswered = "0x0000000000000000000000000000000000000000";
-    if (playerId === "A") {
-      _playerWhoAnswered = playerARef.current || _playerWhoAnswered;
-    } else {
-      _playerWhoAnswered = playerBRef.current || _playerWhoAnswered;
-    }
-    const _isCorrect = selectedOption === questions[currentQuestion].correctAnswer;
-
-    // 调用submitAnswerResult合约
-    if (_matchId && _playerWhoAnswered) {
-      try {
-        await submitAnswerResultAsync({
-          functionName: "submitAnswerResult",
-          args: [BigInt(_matchId), _playerWhoAnswered, BigInt(_questionIndex), _isCorrect],
-        });
-      } catch {} // 可以根据需要提示错误
-    }
-
     const otherPlayerId = playerId === "A" ? "B" : "A";
     const otherPlayerAnswered = hasPlayerAnswered(otherPlayerId, questions[currentQuestion].id);
 
@@ -203,7 +182,7 @@ export default function BattlePage() {
     const playerBAnswer = getPlayerAnswer("B", questions[currentQuestion].id);
 
     let className =
-      "bg-gray-800/50 border border-gray-600 rounded-lg p-4 text-center text-lg font-medium cursor-pointer transition-all duration-300 hover:scale-105";
+      "bg-gray-800/50 text-amber-400 border border-gray-600 rounded-lg p-4 text-center text-lg font-medium cursor-pointer transition-all duration-300 hover:scale-105";
 
     if (playerAAnswer === optionIndex && playerBAnswer === optionIndex) {
       // 两个选手都选了这个选项 - 紫色
@@ -496,7 +475,7 @@ export default function BattlePage() {
 
                     {/* 机器人对话框 */}
                     <motion.div
-                      className="absolute -top-16 -left-32 w-80 bg-black/90 text-cyan-400 text-sm p-3 rounded-lg border border-cyan-400/50"
+                      className="absolute -top-16 -left-32 w-80  text-sm p-3 text-white rounded-lg border border-cyan-400/50"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5 }}
