@@ -67,6 +67,7 @@ export default function BattlePage() {
             audio: data.audio,
           },
         ]);
+        setAiSpeech("🤖 题目已出，请选手A和选手B开始答题...");
       }
     } catch {
       setAiSpeech("❌ 获取题目失败，请刷新重试");
@@ -268,9 +269,7 @@ export default function BattlePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="text-xl text-gray-300">
-            题目 {currentQuestion + 1} / {questions.length}
-          </div>
+          <div className="text-xl text-gray-300">题目 {currentQuestion + 1} / 5</div>
         </motion.div>
 
         {/* 主要游戏区域 - 三列布局 */}
