@@ -1,0 +1,310 @@
+/* Vaporwave Battle Arena Styles */
+
+/* CRT Effect */
+@keyframes flicker {
+  0% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+
+/* Grid Movement */
+@keyframes gridMove {
+  0% { transform: perspective(1000px) rotateX(60deg) translateZ(-300px) translateY(0); }
+  100% { transform: perspective(1000px) rotateX(60deg) translateZ(-300px) translateY(30px); }
+}
+
+/* Player Glow Effects */
+@keyframes pulseLeft {
+  0% { box-shadow: 0 0 30px rgba(255, 110, 199, 0.3), inset 0 0 30px rgba(0, 255, 255, 0.1); }
+  100% { box-shadow: 0 0 50px rgba(255, 110, 199, 0.6), inset 0 0 50px rgba(0, 255, 255, 0.2); }
+}
+
+@keyframes pulseRight {
+  0% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), inset 0 0 30px rgba(255, 110, 199, 0.1); }
+  100% { box-shadow: 0 0 50px rgba(0, 255, 255, 0.6), inset 0 0 50px rgba(255, 110, 199, 0.2); }
+}
+
+@keyframes aiGlow {
+  0% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.4), inset 0 0 40px rgba(255, 110, 199, 0.1); }
+  100% { box-shadow: 0 0 60px rgba(0, 255, 255, 0.7), inset 0 0 60px rgba(255, 110, 199, 0.2); }
+}
+
+/* Rotation Effects */
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes robotBob {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-10px); }
+}
+
+/* Battle Page Styles */
+.vaporwave-bg {
+  background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #660033 100%);
+  color: #00ffff;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.vaporwave-crt-overlay {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 255, 0.03) 2px,
+    rgba(0, 255, 255, 0.03) 4px
+  );
+  animation: flicker 0.15s infinite linear alternate;
+}
+
+.vaporwave-grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 110, 199, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 110, 199, 0.2) 1px, transparent 1px);
+  background-size: 30px 30px;
+  transform: perspective(1000px) rotateX(60deg) translateZ(-300px);
+  animation: gridMove 15s linear infinite;
+}
+
+.vaporwave-glow-left {
+  box-shadow: 0 0 30px rgba(255, 110, 199, 0.3), inset 0 0 30px rgba(0, 255, 255, 0.1);
+  animation: pulseLeft 3s ease-in-out infinite alternate;
+}
+
+.vaporwave-glow-right {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), inset 0 0 30px rgba(255, 110, 199, 0.1);
+  animation: pulseRight 3s ease-in-out infinite alternate;
+}
+
+.vaporwave-glow-ai {
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.4), inset 0 0 40px rgba(255, 110, 199, 0.1);
+  animation: aiGlow 2s ease-in-out infinite alternate;
+}
+
+.vaporwave-text-pink {
+  color: #ff6ec7;
+  text-shadow: 0 0 15px #ff6ec7;
+  letter-spacing: 0.1rem;
+}
+
+.vaporwave-text-cyan {
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.vaporwave-title {
+  letter-spacing: 0.2rem;
+}
+
+.vaporwave-spin {
+  animation: rotate 20s linear infinite;
+}
+
+.vaporwave-spin-reverse {
+  animation: rotate 20s linear infinite reverse;
+}
+
+.vaporwave-bob {
+  animation: robotBob 1.5s ease-in-out infinite alternate;
+}
+
+.vaporwave-button {
+  background: linear-gradient(45deg, #ff6ec7, #00ffff);
+  border: none;
+  padding: 15px 30px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 20px rgba(255, 110, 199, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-weight: bold;
+  display: inline-block;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.vaporwave-option-button {
+  background: linear-gradient(135deg, rgba(255, 110, 199, 0.2), rgba(0, 255, 255, 0.2));
+  border: 2px solid #ff6ec7;
+  color: #00ffff;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+.vaporwave-option-button:hover {
+  background: linear-gradient(135deg, rgba(255, 110, 199, 0.4), rgba(0, 255, 255, 0.4));
+  box-shadow: 0 0 20px rgba(255, 110, 199, 0.5);
+  transform: scale(1.02);
+}
+
+/* Blockchain Styles */
+@keyframes chainPulse {
+  0% {
+    box-shadow:
+      0 0 10px #00ffff,
+      0 2px 0 #00ffff,
+      0 -2px 0 #00ffff;
+    opacity: 0.8;
+  }
+  100% {
+    box-shadow:
+      0 0 20px #ff6ec7,
+      0 2px 0 #ff6ec7,
+      0 -2px 0 #ff6ec7;
+    opacity: 1;
+  }
+}
+
+@keyframes blockchain-scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.vaporwave-blockchain-header {
+  background: linear-gradient(90deg, rgba(255, 110, 199, 0.1), rgba(0, 255, 255, 0.1));
+  border-bottom: 2px solid #ff6ec7;
+}
+
+.vaporwave-blockchain-scroll {
+  animation: blockchain-scroll 20s linear infinite;
+}
+
+.vaporwave-block {
+  position: relative;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.vaporwave-block:before {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid #00ffff;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  z-index: 2;
+}
+
+.vaporwave-chain-line {
+  background: linear-gradient(90deg, #00ffff, #ff6ec7);
+  box-shadow: 0 0 10px #00ffff, 0 2px 0 #00ffff, 0 -2px 0 #00ffff;
+  animation: chainPulse 2s ease-in-out infinite alternate;
+}
+
+.vaporwave-block-title {
+  color: #ff6ec7;
+  text-shadow: 0 0 10px #ff6ec7;
+}
+
+.vaporwave-block-result {
+  color: #00ffff;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+/* Audience Styles */
+@keyframes cheer {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+@keyframes myCheer {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+  }
+}
+
+.vaporwave-audience-header {
+  background: linear-gradient(90deg, rgba(255, 110, 199, 0.1), rgba(0, 255, 255, 0.1));
+  border-top: 3px solid #ff6ec7;
+}
+
+.vaporwave-audience-title {
+  color: #ff6ec7;
+  text-shadow: 0 0 15px #ff6ec7;
+  letter-spacing: 0.2rem;
+}
+
+.vaporwave-seat {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.vaporwave-seat-empty {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: rgba(0, 255, 255, 0.3);
+  color: #00ffff;
+}
+
+.vaporwave-seat-empty:hover {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.vaporwave-seat-occupied {
+  background: linear-gradient(45deg, #ff6ec7, #00ffff);
+  animation: cheer 2s ease-in-out infinite alternate;
+  box-shadow: 0 0 15px rgba(255, 110, 199, 0.5);
+  cursor: not-allowed;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.vaporwave-seat-mine {
+  background: linear-gradient(45deg, #00ff00, #00ffff);
+  border-color: #00ff00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+  animation: myCheer 1.5s ease-in-out infinite alternate;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.vaporwave-seat-selected {
+  box-shadow: 0 0 25px rgba(255, 110, 199, 0.8);
+  border-color: #ff6ec7;
+  transform: scale(1.15);
+}
+
+.vaporwave-info-text {
+  color: #00ffff;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+.vaporwave-success-text {
+  color: #00ff00;
+  text-shadow: 0 0 8px #00ff00;
+}
+
+.vaporwave-warning-text {
+  color: #ffff00;
+  text-shadow: 0 0 8px #ffff00;
+}
