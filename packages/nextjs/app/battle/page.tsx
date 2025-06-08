@@ -553,18 +553,6 @@ export default function BattlePage() {
           </div>
         </div>
       </div>
-      {/* 进度条 */}
-      <motion.div className="mt-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
-        <div className="bg-gray-800 rounded-full h-4 overflow-hidden">
-          <motion.div
-            className="bg-gradient-to-r from-cyan-500 to-red-500 h-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-            transition={{ duration: 0.5 }}
-          />
-        </div>
-        <div className="text-center mt-2 text-gray-400">进度: {currentQuestion + 1} / 5</div>
-      </motion.div>
 
       {/* 观众席 */}
       <motion.div
