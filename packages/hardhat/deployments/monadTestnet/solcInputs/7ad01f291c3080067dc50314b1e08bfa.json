@@ -1,0 +1,42 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "@openzeppelin/contracts/access/Ownable.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\n\npragma solidity ^0.8.20;\n\nimport {Context} from \"../utils/Context.sol\";\n\n/**\n * @dev Contract module which provides a basic access control mechanism, where\n * there is an account (an owner) that can be granted exclusive access to\n * specific functions.\n *\n * The initial owner is set to the address provided by the deployer. This can\n * later be changed with {transferOwnership}.\n *\n * This module is used through inheritance. It will make available the modifier\n * `onlyOwner`, which can be applied to your functions to restrict their use to\n * the owner.\n */\nabstract contract Ownable is Context {\n    address private _owner;\n\n    /**\n     * @dev The caller account is not authorized to perform an operation.\n     */\n    error OwnableUnauthorizedAccount(address account);\n\n    /**\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\n     */\n    error OwnableInvalidOwner(address owner);\n\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\n\n    /**\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\n     */\n    constructor(address initialOwner) {\n        if (initialOwner == address(0)) {\n            revert OwnableInvalidOwner(address(0));\n        }\n        _transferOwnership(initialOwner);\n    }\n\n    /**\n     * @dev Throws if called by any account other than the owner.\n     */\n    modifier onlyOwner() {\n        _checkOwner();\n        _;\n    }\n\n    /**\n     * @dev Returns the address of the current owner.\n     */\n    function owner() public view virtual returns (address) {\n        return _owner;\n    }\n\n    /**\n     * @dev Throws if the sender is not the owner.\n     */\n    function _checkOwner() internal view virtual {\n        if (owner() != _msgSender()) {\n            revert OwnableUnauthorizedAccount(_msgSender());\n        }\n    }\n\n    /**\n     * @dev Leaves the contract without owner. It will not be possible to call\n     * `onlyOwner` functions. Can only be called by the current owner.\n     *\n     * NOTE: Renouncing ownership will leave the contract without an owner,\n     * thereby disabling any functionality that is only available to the owner.\n     */\n    function renounceOwnership() public virtual onlyOwner {\n        _transferOwnership(address(0));\n    }\n\n    /**\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\n     * Can only be called by the current owner.\n     */\n    function transferOwnership(address newOwner) public virtual onlyOwner {\n        if (newOwner == address(0)) {\n            revert OwnableInvalidOwner(address(0));\n        }\n        _transferOwnership(newOwner);\n    }\n\n    /**\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\n     * Internal function without access restriction.\n     */\n    function _transferOwnership(address newOwner) internal virtual {\n        address oldOwner = _owner;\n        _owner = newOwner;\n        emit OwnershipTransferred(oldOwner, newOwner);\n    }\n}\n"
+    },
+    "@openzeppelin/contracts/utils/Context.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @dev Provides information about the current execution context, including the\n * sender of the transaction and its data. While these are generally available\n * via msg.sender and msg.data, they should not be accessed in such a direct\n * manner, since when dealing with meta-transactions the account sending and\n * paying for execution may not be the actual sender (as far as an application\n * is concerned).\n *\n * This contract is only required for intermediate, library-like contracts.\n */\nabstract contract Context {\n    function _msgSender() internal view virtual returns (address) {\n        return msg.sender;\n    }\n\n    function _msgData() internal view virtual returns (bytes calldata) {\n        return msg.data;\n    }\n\n    function _contextSuffixLength() internal view virtual returns (uint256) {\n        return 0;\n    }\n}\n"
+    },
+    "contracts/ImmortalBlock.sol": {
+      "content": "//SPDX-License-Identifier: MIT\npragma solidity >=0.8.0 <0.9.0;\n\nimport \"@openzeppelin/contracts/access/Ownable.sol\"; \n\n/**\n * @title 不朽区块合约\n * @dev 存储每场比赛的结果。\n */\ncontract ImmortalBlock is Ownable {\n\n    struct ImmortalRecord {\n        uint256 matchId;                // 对应的比赛 ID\n        address winner;                 // 胜利者地址\n        string winnerName;              // 胜利者名称\n        uint256 timestamp;              // 记录创建的时间戳\n        string extraData;               // 额外数据 (例如 IPFS CID)\n    }\n\n    ImmortalRecord[] public immortalRecords;\n\n    event BlockForged(\n        uint256 indexed blockId,        // 新区块的 ID (即数组索引)\n        uint256 indexed matchId,        // 比赛 ID\n        address indexed winner,         // 胜利者地址\n        string winnerName,\n        uint256 timestamp\n    );\n\n    /**\n     * @dev 设置合约所有者\n     */\n    constructor(address _initialOwner) Ownable(_initialOwner) {}\n\n    /**\n     * @dev 记录比赛结果\n     * @param _matchId 比赛ID\n     * @param _winner 胜利者地址\n     * @param _winnerName 胜利者名称\n     * @param _extraData 额外数据 (例如 IPFS CID)\n     */\n    function forgeBlock(\n        uint256 _matchId,\n        address _winner,\n        string calldata _winnerName, \n        string calldata _extraData  \n    ) external onlyOwner { \n        require(_winner != address(0), \"ImmortalBlock: Winner address cannot be zero.\");\n\n        uint256 blockId = immortalRecords.length;\n\n        immortalRecords.push(ImmortalRecord({\n            matchId: _matchId,\n            winner: _winner,\n            winnerName: _winnerName,\n            timestamp: block.timestamp, \n            extraData: _extraData\n        }));\n\n        emit BlockForged(blockId, _matchId, _winner, _winnerName, block.timestamp);\n    }\n\n    /**\n     * @dev 获取不朽区块数量\n     * @return 不朽区块数量\n     */\n    function getRecordsCount() public view returns (uint256) {\n        return immortalRecords.length;\n    }\n\n    /**\n     * @dev 获取不朽区块\n     * @param _blockId 区块ID\n     * @return 不朽区块\n     */\n    function getRecordById(uint256 _blockId) public view returns (ImmortalRecord memory) {\n        require(_blockId < immortalRecords.length, \"ImmortalBlock: Invalid block ID.\");\n        return immortalRecords[_blockId];\n    }\n\n    /**\n     * @dev 获取最近的N个不朽区块\n     * @param _limit 返回的最近记录数量\n     * @return 不朽区块数组\n     */\n    function getRecentRecords(uint256 _limit) public view returns (ImmortalRecord[] memory) {\n        uint256 count = immortalRecords.length;\n        if (_limit == 0) {\n            return new ImmortalRecord[](0);\n        }\n        // 如果请求的数量超过实际数量，则返回所有记录\n        uint256 numToReturn = _limit > count ? count : _limit;\n\n        ImmortalRecord[] memory recent = new ImmortalRecord[](numToReturn);\n        for (uint256 i = 0; i < numToReturn; i++) {\n            // 从最新的记录开始取 (count - 1 是最新，count - numToReturn 是第 numToReturn 个最新的)\n            recent[i] = immortalRecords[count - 1 - i];\n        }\n        return recent;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}
