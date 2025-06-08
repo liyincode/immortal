@@ -14,6 +14,7 @@ export const WrongNetworkDropdown = () => {
       <ul
         tabIndex={0}
         className="dropdown-content menu p-2 mt-1 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
+        style={{ background: "rgb(218, 232, 255)" }}
       >
         <NetworkOptions />
         <li>
