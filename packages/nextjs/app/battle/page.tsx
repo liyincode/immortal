@@ -51,6 +51,7 @@ export default function BattlePage() {
   const [aiSpeech, setAiSpeech] = useState("🤖 正在出题中...");
   const [loading, setLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [isRobotSpeaking, setIsRobotSpeaking] = useState(false);
 
   // AI 机器人的对话内容
   const aiPhrases = [
@@ -145,6 +146,23 @@ export default function BattlePage() {
       audioRef.current.play().catch(() => {});
     }
   }, [currentQuestion, questions]);
+
+  // 监听 audio 播放状态，控制机器人说话动画
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const handlePlay = () => setIsRobotSpeaking(true);
+    const handlePause = () => setIsRobotSpeaking(false);
+    const handleEnded = () => setIsRobotSpeaking(false);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("ended", handleEnded);
+    return () => {
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [questions, currentQuestion]);
 
   const handlePlayerAnswer = async (playerId: "A" | "B", selectedOption: number) => {
     const newAnswer: PlayerAnswer = {
@@ -414,95 +432,98 @@ export default function BattlePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                {/* AI 机器人裁判 */}
-                <div className="text-center mb-8">
-                  <div className="relative inline-block">
-                    {/* 简化的方块机器人 */}
-                    <motion.div
-                      className="w-20 h-20 bg-gradient-to-b from-gray-600 to-gray-800 rounded-lg border-2 border-cyan-400 mx-auto mb-4 relative flex flex-col items-center justify-center"
-                      animate={{
-                        y: [0, -8, 0],
-                        rotateY: [0, 5, 0, -5, 0],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      {/* 机器人眼睛 */}
-                      <div className="flex gap-2 mb-2">
+                {/* 题目区域顶部：机器人或音频动画 */}
+                <div className="flex flex-col items-center justify-center mb-8">
+                  {questions[currentQuestion]?.audio && isRobotSpeaking ? (
+                    // 音频播放动画
+                    <div className="my-4">
+                      <div className="flex gap-1 items-end h-8">
                         <motion.div
-                          className="w-2 h-2 bg-cyan-400 rounded-full"
-                          animate={{
-                            opacity: [1, 0.3, 1],
-                            scale: [1, 0.8, 1],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: 0,
-                          }}
+                          className="w-1 bg-cyan-400 rounded"
+                          animate={{ height: [8, 32, 8] }}
+                          transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0 }}
                         />
                         <motion.div
-                          className="w-2 h-2 bg-cyan-400 rounded-full"
-                          animate={{
-                            opacity: [1, 0.3, 1],
-                            scale: [1, 0.8, 1],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: 0.5,
-                          }}
+                          className="w-1 bg-yellow-400 rounded"
+                          animate={{ height: [16, 8, 24, 8, 16] }}
+                          transition={{ duration: 0.7, repeat: Infinity, ease: "easeInOut", delay: 0.1 }}
+                        />
+                        <motion.div
+                          className="w-1 bg-pink-400 rounded"
+                          animate={{ height: [24, 8, 32, 8, 24] }}
+                          transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                        />
+                        <motion.div
+                          className="w-1 bg-cyan-400 rounded"
+                          animate={{ height: [16, 32, 8, 32, 16] }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                        />
+                        <motion.div
+                          className="w-1 bg-yellow-400 rounded"
+                          animate={{ height: [8, 24, 8, 32, 8] }}
+                          transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
                         />
                       </div>
-
-                      {/* 机器人嘴巴 */}
+                    </div>
+                  ) : (
+                    // 机器人动画和对话框
+                    <div className="text-center mb-4 relative inline-block">
                       <motion.div
-                        className="w-6 h-0.5 bg-yellow-400 rounded-full"
-                        animate={{
-                          width: [24, 16, 24],
-                          opacity: [1, 0.7, 1],
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </motion.div>
-
-                    {/* 机器人对话框 */}
-                    <motion.div
-                      className="absolute -top-16 -left-32 w-80  text-sm p-3 text-white rounded-lg border border-cyan-400/50"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <motion.div
-                        key={aiSpeech}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.8 }}
+                        className="w-20 h-20 bg-gradient-to-b from-gray-600 to-gray-800 rounded-lg border-2 border-cyan-400 mx-auto mb-4 relative flex flex-col items-center justify-center"
+                        animate={{ y: [0, -8, 0], rotateY: [0, 5, 0, -5, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                       >
-                        {aiSpeech}
+                        {/* 机器人眼睛 */}
+                        <div className="flex gap-2 mb-2">
+                          <motion.div
+                            className="w-2 h-2 bg-cyan-400 rounded-full"
+                            animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 0 }}
+                          />
+                          <motion.div
+                            className="w-2 h-2 bg-cyan-400 rounded-full"
+                            animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                          />
+                        </div>
+                        {/* 机器人嘴巴 */}
+                        <motion.div
+                          className="w-8 h-2 bg-yellow-400 rounded-full"
+                          animate={{ scaleY: 1, opacity: 1 }}
+                          transition={{ duration: 0.2 }}
+                        />
                       </motion.div>
-                      {/* 对话框箭头 */}
-                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-cyan-400/50"></div>
-                    </motion.div>
-                  </div>
-
-                  <motion.h2
-                    className="text-3xl font-bold mb-6 text-white bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={currentQuestion}
-                    transition={{ duration: 0.6 }}
-                  >
-                    {questions[currentQuestion]?.question}
-                  </motion.h2>
+                      {/* 机器人对话框 */}
+                      <motion.div
+                        className="absolute -top-16 -left-32 w-80 text-sm p-3 text-white rounded-lg border border-cyan-400/50"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <motion.div
+                          key={aiSpeech}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.8 }}
+                        >
+                          {aiSpeech}
+                        </motion.div>
+                        {/* 对话框箭头 */}
+                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-cyan-400/50"></div>
+                      </motion.div>
+                    </div>
+                  )}
                 </div>
+
+                <motion.h2
+                  className="text-3xl font-bold mb-6 text-white bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={currentQuestion}
+                  transition={{ duration: 0.6 }}
+                >
+                  {questions[currentQuestion]?.question}
+                </motion.h2>
 
                 <motion.div
                   className="grid grid-cols-2 gap-4"
