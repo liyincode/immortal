@@ -1,5 +1,7 @@
 # 不朽 (Immortal) 🥊
 
+[English](./README-EN.md) | 中文
+
 > 一款融合 Web3 和 AI 裁判的知识答题擂台竞技游戏
 
 ## 🏆 项目简介
